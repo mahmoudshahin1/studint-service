@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>استمارة طلب خدمات إضافية — جامعة الإمام عبدالرحمن بن فيصل</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0b1f3a; --navy-2:#162d4e;
+  --gold:#c9a84c; --gold-2:#e2bf6e; --gold-bg:#fdf8ee; --gold-border:#e8d49a;
+  --white:#fff; --surface:#f7f8fa; --surface-2:#f0f2f6;
+  --border:#e2e6ed; --border-2:#cbd1dc;
+  --text-1:#0b1f3a; --text-2:#4a5568; --text-3:#8a93a6;
+  --success:#0d7a4e; --success-bg:#eaf7f1;
+  --error:#c0392b; --error-bg:#fdf1f0;
+  --focus-ring:rgba(201,168,76,.22);
+  --r:10px; --rl:16px; --rxl:20px;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Cairo',sans-serif;
+  background:var(--surface); color:var(--text-1);
+  min-height:100vh; direction:rtl;
+  font-size:14px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* ── Header ── */
+.hdr{background:var(--navy);position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr-inner{max-width:900px;margin:0 auto;padding:0 16px;height:60px;display:flex;align-items:center;gap:12px}
+.hdr-emblem{width:42px;height:42px;min-width:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid rgba(201,168,76,.5);padding:3px}
+.hdr-emblem img{width:100%;height:100%;object-fit:contain;border-radius:50%}
+.hdr-names{line-height:1.25;min-width:0}
+.hdr-title{font-size:13px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-sub{font-size:10px;color:rgba(255,255,255,.4);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-sep{width:1px;height:26px;background:rgba(255,255,255,.1);flex-shrink:0}
+.hdr-dept{font-size:11px;color:rgba(255,255,255,.55);font-weight:500;white-space:nowrap}
+
+/* ── Page ── */
+.page{max-width:900px;margin:0 auto;padding:24px 14px 100px}
+
+/* ── Section Card ── */
+.section-card{background:var(--white);border:1px solid var(--border);border-radius:var(--rxl);overflow:hidden;margin-bottom:20px}
+.section-head{background:var(--navy);padding:18px 20px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}
+.section-head::after{content:'';position:absolute;top:-30px;left:-30px;width:100px;height:100px;border-radius:50%;background:rgba(201,168,76,.08);pointer-events:none}
+.section-num{width:32px;height:32px;min-width:32px;border-radius:50%;background:rgba(201,168,76,.18);border:1.5px solid rgba(201,168,76,.4);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--gold-2);position:relative;z-index:1}
+.section-info{position:relative;z-index:1;min-width:0}
+.section-head h2{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.section-head p{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px;font-weight:400}
+.section-body{padding:20px}
+
+/* ── Grid ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.col-full{grid-column:1/-1}
+
+/* ── Fields ── */
+.fgroup{display:flex;flex-direction:column;gap:5px}
+.flabel{font-size:12px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:4px}
+.req{color:var(--error);font-size:13px;line-height:1}
+.finput{
+  border:1.5px solid var(--border);border-radius:var(--r);
+  padding:10px 12px;font-family:'Cairo',sans-serif;
+  font-size:13px;color:var(--navy);background:var(--white);
+  width:100%;transition:border-color .15s,box-shadow .15s,background .15s;
+  outline:none;direction:rtl;appearance:none;-webkit-appearance:none;
+}
+.finput::placeholder{color:var(--text-3);font-weight:400}
+.finput:focus{border-color:var(--gold);background:var(--gold-bg);box-shadow:0 0 0 3px var(--focus-ring)}
+.finput.err{border-color:var(--error);background:var(--error-bg)}
+select.finput{cursor:pointer;background-image:none}
+textarea.finput{min-height:80px;resize:vertical}
+.errmsg{font-size:11px;color:var(--error);font-weight:600;display:none;align-items:center;gap:4px;margin-top:2px}
+.errmsg.show{display:flex}
+
+/* ── Toggle card ── */
+.toggle-card{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;margin-bottom:18px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  user-select:none;transition:border-color .15s,background .15s;
+  gap:12px;
+}
+.toggle-card.on{border-color:var(--gold-border);background:var(--gold-bg)}
+.tc-info{flex:1;min-width:0}
+.tc-t{font-size:13px;font-weight:700;color:var(--navy)}
+.tc-s{font-size:11.5px;color:var(--text-3);margin-top:2px;line-height:1.5}
+.sw{width:44px;min-width:44px;height:24px;position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sw input{display:none}
+.sw-track{position:absolute;inset:0;background:var(--border-2);border-radius:99px;transition:.25s var(--ease)}
+.sw-track::before{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;right:3px;transition:.25s cubic-bezier(.34,1.56,.64,1);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle-card.on .sw-track{background:var(--gold)}
+.toggle-card.on .sw-track::before{right:23px}
+.cond-section{display:none}
+.cond-section.open{display:block;animation:fadeIn .2s var(--ease)}
+
+/* ── Services ── */
+.svc-group{border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:16px}
+.svc-group-hdr{background:var(--navy);padding:10px 16px;font-size:11px;font-weight:700;color:rgba(255,255,255,.65);letter-spacing:.5px;text-transform:uppercase}
+.svc-row{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;border-top:1px solid var(--border);
+  transition:background .15s;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.svc-row:hover{background:var(--surface)}
+.svc-row.picked{background:var(--gold-bg);border-right:3px solid var(--gold)}
+.svc-check{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.svc-check input[type=checkbox]{display:none}
+.custom-svc-box{
+  width:18px;min-width:18px;height:18px;border:2px solid var(--border-2);
+  border-radius:4px;background:var(--white);transition:all .15s;position:relative;
+}
+.svc-row.picked .custom-svc-box{background:var(--gold);border-color:var(--gold)}
+.svc-row.picked .custom-svc-box::after{content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg)}
+.svc-name{font-size:12.5px;font-weight:600;color:var(--text-1);line-height:1.4}
+.svc-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.svc-badge{font-size:12px;font-weight:700;color:var(--gold);white-space:nowrap}
+.svc-qty{
+  width:50px;border:1.5px solid var(--border);border-radius:8px;
+  padding:5px 4px;font-family:'Cairo',sans-serif;font-size:12px;
+  text-align:center;color:var(--navy);background:var(--white);
+  direction:ltr;-webkit-appearance:none;
+}
+.svc-qty:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--focus-ring);outline:none}
+.svc-qty:disabled{background:var(--surface);color:var(--text-3)}
+
+/* ── Totals ── */
+.totals-box{background:var(--navy);border-radius:var(--rl);padding:18px 20px;margin-top:18px}
+.tot-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.tot-row .tl{font-size:12px;color:rgba(255,255,255,.5);font-weight:600}
+.tot-row .tv{font-size:13px;color:rgba(255,255,255,.85);font-weight:700}
+.tot-divider{height:1px;background:rgba(255,255,255,.08);margin:8px 0}
+.tot-row.final .tl{font-size:13px;color:var(--gold-2);font-weight:700}
+.tot-row.final .tv{font-size:18px;color:#fff;font-weight:800}
+
+/* ── File Upload ── */
+.upload-zone{
+  border:2px dashed var(--border-2);border-radius:var(--r);
+  padding:20px 16px;text-align:center;cursor:pointer;
+  background:var(--surface);position:relative;overflow:hidden;
+  transition:border-color .15s,background .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-zone:hover,.upload-zone:active{border-color:var(--gold);background:var(--gold-bg)}
+.upload-zone.filled{border-color:var(--success);background:var(--success-bg);border-style:solid}
+.uz-icon{font-size:22px;margin-bottom:6px;display:block}
+.uz-title{font-size:12.5px;font-weight:700;color:var(--navy)}
+.uz-hint{font-size:11px;color:var(--text-3);margin-top:3px}
+.uz-fname{font-size:11.5px;color:var(--success);font-weight:700;margin-top:6px;word-break:break-all}
+
+/* ── Info box ── */
+.infobox{background:#eef5fb;border:1px solid #b8d5ee;border-radius:var(--r);padding:12px 14px;display:flex;gap:8px;align-items:flex-start;margin-bottom:18px}
+.infobox p{font-size:12px;color:#1a4a6b;font-weight:600;line-height:1.6}
+
+/* ── Pledge ── */
+.pledge-box{background:var(--navy);border-radius:var(--rl);padding:20px;color:rgba(255,255,255,.8);font-size:13px;line-height:1.9;margin-bottom:18px}
+.pledge-box strong{color:var(--gold-2);font-weight:700}
+
+/* ── Check row ── */
+.check-row{
+  display:flex;align-items:flex-start;gap:10px;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--r);padding:13px 14px;margin-bottom:14px;
+  cursor:pointer;transition:border-color .15s,background .15s;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+}
+.check-row.checked{border-color:var(--gold-border);background:var(--gold-bg)}
+.check-row input[type=checkbox]{display:none}
+.custom-check{
+  width:18px;min-width:18px;height:18px;border:2px solid var(--border-2);
+  border-radius:4px;background:var(--white);transition:all .15s;
+  position:relative;margin-top:1px;
+}
+.check-row.checked .custom-check{background:var(--gold);border-color:var(--gold)}
+.check-row.checked .custom-check::after{content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg)}
+.check-label{font-size:13px;font-weight:600;color:var(--navy);line-height:1.5;cursor:pointer;flex:1}
+
+/* ── Signature ── */
+#sigCanvas{border:1.5px solid var(--border);border-radius:var(--r);cursor:crosshair;width:100%;display:block;background:var(--surface);touch-action:none;max-height:130px}
+.sig-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:8px}
+.sig-hint{font-size:11px;color:var(--text-3)}
+.btn-clr{font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;color:var(--error);background:none;border:1px solid var(--border);border-radius:8px;padding:5px 14px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+
+/* ── Payment ── */
+.pay-banner{background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:var(--r);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.pay-banner .lbl{font-size:11.5px;color:var(--text-2);font-weight:600}
+.pay-banner .amt{font-size:22px;font-weight:800;color:var(--navy)}
+.card-vis{background:var(--navy);border-radius:14px;padding:20px;margin-bottom:20px;min-height:145px;position:relative;overflow:hidden}
+.card-vis::before{content:'';position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:rgba(201,168,76,.08)}
+.card-chip{width:32px;height:26px;background:var(--gold);border-radius:5px;margin-bottom:16px;position:relative}
+.card-chip::before{content:'';position:absolute;inset:4px 6px;border:1px solid rgba(0,0,0,.2);border-radius:2px}
+.card-num{font-size:16px;font-weight:700;letter-spacing:2px;color:#fff;margin-bottom:14px;direction:ltr;word-break:break-all}
+.card-btm{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px;position:relative}
+.card-lbl{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.5px;margin-bottom:2px}
+.card-val{font-size:13px;color:#fff;font-weight:700}
+
+/* ── Bank info ── */
+.bank-info{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-top:16px}
+.bank-t{font-size:11px;font-weight:700;color:var(--text-3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px}
+.bank-row{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;gap:8px;flex-wrap:wrap}
+.bank-row:last-child{border-bottom:none;padding-bottom:0}
+.bank-row .bl{color:var(--text-3);font-weight:500;white-space:nowrap}
+.bank-row .bv{color:var(--navy);font-weight:700;direction:ltr;text-align:left;word-break:break-all}
+
+/* ── Sep ── */
+.sep{display:flex;align-items:center;gap:10px;margin:20px 0 16px}
+.sep-line{flex:1;height:1px;background:var(--border)}
+.sep-lbl{font-size:10.5px;font-weight:700;color:var(--text-3);white-space:nowrap;letter-spacing:.5px;text-transform:uppercase}
+
+/* ── Submit ── */
+.submit-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--rxl);padding:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.submit-note{font-size:11.5px;color:var(--text-3);line-height:1.6;flex:1;min-width:200px}
+.btn-submit{font-family:'Cairo',sans-serif;font-size:14px;font-weight:800;border:none;border-radius:var(--r);padding:13px 28px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;box-shadow:0 2px 6px rgba(11,31,58,.2),0 4px 16px rgba(11,31,58,.12);transition:all .2s var(--ease);-webkit-tap-highlight-color:transparent;width:100%;justify-content:center}
+.btn-submit:active{transform:scale(.98)}
+
+/* ── Sticky bar ── */
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:1px solid rgba(255,255,255,.1);padding:10px 0;z-index:150;transform:translateY(100%);transition:transform .3s var(--ease)}
+.sticky-bar.visible{transform:translateY(0)}
+.sticky-inner{max-width:900px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sb-label{font-size:11px;color:rgba(255,255,255,.5);font-weight:600}
+.sb-amt{font-size:17px;font-weight:800;color:var(--gold-2)}
+.btn-scroll-pay{font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;background:var(--gold);color:var(--navy);border:none;border-radius:8px;padding:9px 18px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+
+/* ── Success Modal ── */
+.success-overlay{display:none;position:fixed;inset:0;background:rgba(11,31,58,.65);z-index:999;align-items:center;justify-content:center;padding:16px}
+.success-overlay.show{display:flex;animation:fadeIn .3s ease}
+.success-modal{background:var(--white);border-radius:var(--rxl);padding:32px 24px;text-align:center;max-width:460px;width:100%;max-height:90vh;overflow-y:auto}
+.success-check{width:70px;height:70px;border-radius:50%;background:var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+.success-check svg{width:32px;height:32px}
+.success-modal h2{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:8px}
+.success-modal p{font-size:12.5px;color:var(--text-2);margin-bottom:20px;line-height:1.8}
+.ref-box{background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:var(--r);padding:12px 20px;margin-bottom:20px;display:inline-block}
+.ref-box .rl{font-size:10px;color:var(--text-3);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.ref-box .rv{font-size:18px;font-weight:800;color:var(--navy);direction:ltr;letter-spacing:2px}
+.btn-close{font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;background:var(--navy);color:#fff;border:none;border-radius:var(--r);padding:11px 24px;cursor:pointer;width:100%;-webkit-tap-highlight-color:transparent}
+
+/* ── Animations ── */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .hdr-sep,.hdr-dept{display:none}
+  .hdr-inner{gap:10px;padding:0 12px}
+  .page{padding:14px 10px 90px}
+  .section-body{padding:16px 12px}
+  .section-head{padding:14px 14px}
+  .section-head h2{font-size:14px}
+  .section-head p{font-size:11px}
+  .section-num{width:28px;height:28px;min-width:28px;font-size:12px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .col-full{grid-column:1}
+  .svc-row{padding:10px 12px;flex-wrap:nowrap}
+  .svc-name{font-size:12px}
+  .svc-badge{font-size:11px}
+  .svc-qty{width:44px;font-size:12px}
+  .toggle-card{padding:12px 12px}
+  .tc-t{font-size:12.5px}
+  .tc-s{font-size:11px}
+  .finput{font-size:13px;padding:10px 12px}
+  .pledge-box{font-size:12.5px;padding:16px}
+  .card-num{font-size:14px;letter-spacing:1px}
+  .totals-box{padding:16px}
+  .submit-wrap{flex-direction:column;text-align:center;padding:16px}
+  .submit-note{min-width:unset}
+  .success-modal{padding:24px 16px}
+  .sticky-inner{padding:0 12px}
+  .bank-row{flex-direction:column;gap:2px}
+  .section-card{border-radius:14px}
+}
+@media(max-width:380px){
+  .hdr-title{font-size:11px}
+  .page{padding:10px 8px 80px}
+  .section-body{padding:14px 10px}
+  .finput{font-size:12.5px}
+  .svc-badge{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-emblem"><img src="data:image/jpeg;base64,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" alt="شعار"></div>
+    <div class="hdr-names">
+      <div class="hdr-title">جامعة الإمام عبدالرحمن بن فيصل</div>
+      <div class="hdr-sub">IMAM ABDULRAHMAN BIN FAISAL UNIVERSITY</div>
+    </div>
+    <div class="hdr-sep"></div>
+    <div class="hdr-dept">عمادة الدراسات العليا</div>
+  </div>
+</header>
+
+<div class="page">
+
+<!-- ① بيانات الطالب -->
+<div class="section-card">
+  <div class="section-head"><div class="section-num">١</div><div class="section-info"><h2>بيانات الطالب</h2><p>أدخل معلوماتك الشخصية والأكاديمية بدقة</p></div></div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div class="fgroup">
+        <label class="flabel">الاسم الكامل <span class="req">*</span></label>
+        <input class="finput" id="f-name" type="text" placeholder="الاسم كما في الهوية الوطنية">
+        <span class="errmsg" id="e-name">هذا الحقل مطلوب</span>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">الرقم الجامعي <span class="req">*</span></label>
+        <input class="finput" id="f-sid" type="text" placeholder="مثال: 2021001234">
+        <span class="errmsg" id="e-sid">هذا الحقل مطلوب</span>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">رقم الهوية / الإقامة <span class="req">*</span></label>
+        <input class="finput" id="f-id" type="text" placeholder="10 أرقام" maxlength="10">
+        <span class="errmsg" id="e-id">هذا الحقل مطلوب</span>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">الكلية <span class="req">*</span></label>
+        <select class="finput" id="f-col">
+          <option value="">— اختر الكلية —</option>
+          <option>كلية الهندسة</option><option>كلية الطب</option><option>كلية العلوم</option>
+          <option>كلية إدارة الأعمال</option><option>كلية التربية</option><option>كلية الحقوق</option>
+          <option>كلية الصيدلة</option><option>كلية علوم الحاسب</option><option>كلية الآداب</option><option>أخرى</option>
+        </select>
+        <span class="errmsg" id="e-col">يُرجى اختيار الكلية</span>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">البرنامج الدراسي <span class="req">*</span></label>
+        <input class="finput" id="f-prog" type="text" placeholder="مثال: ماجستير إدارة الأعمال">
+        <span class="errmsg" id="e-prog">هذا الحقل مطلوب</span>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">سنة التخرج (هجري) <span class="req">*</span></label>
+        <select class="finput" id="f-yr">
+          <option value="">— اختر السنة —</option>
+          <option>1446</option><option>1445</option><option>1444</option><option>1443</option>
+          <option>1442</option><option>1441</option><option>1440</option><option>1439</option>
+          <option>1438</option><option>1437</option><option>1436</option>
+        </select>
+        <span class="errmsg" id="e-yr">يُرجى اختيار السنة</span>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">البريد الإلكتروني الجامعي <span class="req">*</span></label>
+        <input class="finput" id="f-email" type="email" placeholder="student@iau.edu.sa" dir="ltr">
+        <span class="errmsg" id="e-email">أدخل بريداً إلكترونياً صحيحاً</span>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">رقم الجوال <span class="req">*</span></label>
+        <input class="finput" id="f-phone" type="tel" placeholder="05xxxxxxxx" maxlength="10" dir="ltr">
+        <span class="errmsg" id="e-phone">أدخل رقم جوال سعودي صحيح</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ② بيانات الجهة -->
+<div class="section-card">
+  <div class="section-head"><div class="section-num">٢</div><div class="section-info"><h2>بيانات الجهة الطالبة</h2><p>في حال كان التقديم نيابةً عن جهة رسمية</p></div></div>
+  <div class="section-body">
+    <div class="toggle-card" id="tcCard">
+      <div class="tc-info">
+        <div class="tc-t">التقديم نيابة عن جهة؟</div>
+        <div class="tc-s">فعّل هذا الخيار إذا كنت تتقدم بالنيابة عن مؤسسة أو جهة رسمية مع إرفاق خطاب تفويض</div>
+      </div>
+      <div class="sw" id="swOrg"><input type="checkbox" id="isOrg"><span class="sw-track"></span></div>
+    </div>
+    <div class="cond-section" id="orgSec">
+      <div class="grid-2">
+        <div class="fgroup"><label class="flabel">اسم الجهة <span class="req">*</span></label><input class="finput" id="f-oname" type="text" placeholder="الاسم الرسمي للجهة"></div>
+        <div class="fgroup"><label class="flabel">الدولة <span class="req">*</span></label><input class="finput" id="f-ocountry" type="text" placeholder="مثال: المملكة العربية السعودية"></div>
+        <div class="fgroup"><label class="flabel">اسم الموظف المسؤول <span class="req">*</span></label><input class="finput" id="f-oemp" type="text" placeholder="الاسم الكامل للمخوّل"></div>
+        <div class="fgroup"><label class="flabel">البريد الإلكتروني الرسمي <span class="req">*</span></label><input class="finput" id="f-oemail" type="email" placeholder="official@org.com" dir="ltr"></div>
+        <div class="fgroup"><label class="flabel">رقم التواصل <span class="req">*</span></label><input class="finput" id="f-ophone" type="tel" placeholder="+966xxxxxxxxx" dir="ltr"></div>
+        <div class="fgroup"><label class="flabel">الغرض من الطلب <span class="req">*</span></label><input class="finput" id="f-opurpose" type="text" placeholder="وصف موجز للغرض الرسمي"></div>
+      </div>
+      <div style="margin-top:22px;border-top:1px solid var(--border);padding-top:20px;text-align:center;">
+        <div style="font-size:13px;font-weight:700;color:var(--text-2);margin-bottom:4px;">للحصول على النموذج بصيغة word</div>
+        <div style="font-size:12px;color:var(--text-3);margin-bottom:16px;">يمكن النقر والمسح على الباركود التالي</div>
+        <a href="https://docs.google.com/document/d/1ym5imrYb42cEEreZ4IBZOlIcZY0A5roi/edit?usp=sharing&ouid=118223930629689643772&rtpof=true&sd=true" target="_blank" rel="noopener" style="display:inline-block;text-decoration:none;">
+          <div style="background:#fff;border:2px solid #000;border-radius:8px;padding:10px;display:inline-block;box-shadow:0 2px 10px rgba(0,0,0,.15);">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" width="150" height="150" shape-rendering="crispEdges"><rect width="150" height="150" fill="white"/><g fill="black"><rect x="3.19" y="3.19" width="3.69" height="3.69"/><rect x="6.38" y="3.19" width="3.69" height="3.69"/><rect x="9.57" y="3.19" width="3.69" height="3.69"/><rect x="12.77" y="3.19" width="3.69" height="3.69"/><rect x="15.96" y="3.19" width="3.69" height="3.69"/><rect x="19.15" y="3.19" width="3.69" height="3.69"/><rect x="22.34" y="3.19" width="3.69" height="3.69"/><rect x="31.91" y="3.19" width="3.69" height="3.69"/><rect x="38.3" y="3.19" width="3.69" height="3.69"/><rect x="41.49" y="3.19" width="3.69" height="3.69"/><rect x="51.06" y="3.19" width="3.69" height="3.69"/><rect x="63.83" y="3.19" width="3.69" height="3.69"/><rect x="70.21" y="3.19" width="3.69" height="3.69"/><rect x="82.98" y="3.19" width="3.69" height="3.69"/><rect x="95.74" y="3.19" width="3.69" height="3.69"/><rect x="98.94" y="3.19" width="3.69" height="3.69"/><rect x="102.13" y="3.19" width="3.69" height="3.69"/><rect x="105.32" y="3.19" width="3.69" height="3.69"/><rect x="108.51" y="3.19" width="3.69" height="3.69"/><rect x="118.09" y="3.19" width="3.69" height="3.69"/><rect x="124.47" y="3.19" width="3.69" height="3.69"/><rect x="127.66" y="3.19" width="3.69" height="3.69"/><rect x="130.85" y="3.19" width="3.69" height="3.69"/><rect x="134.04" y="3.19" width="3.69" height="3.69"/><rect x="137.23" y="3.19" width="3.69" height="3.69"/><rect x="140.43" y="3.19" width="3.69" height="3.69"/><rect x="143.62" y="3.19" width="3.69" height="3.69"/><rect x="3.19" y="6.38" width="3.69" height="3.69"/><rect x="22.34" y="6.38" width="3.69" height="3.69"/><rect x="31.91" y="6.38" width="3.69" height="3.69"/><rect x="35.11" y="6.38" width="3.69" height="3.69"/><rect x="38.3" y="6.38" width="3.69" height="3.69"/><rect x="41.49" y="6.38" width="3.69" height="3.69"/><rect x="54.26" y="6.38" width="3.69" height="3.69"/><rect x="57.45" y="6.38" width="3.69" height="3.69"/><rect x="60.64" y="6.38" width="3.69" height="3.69"/><rect x="63.83" y="6.38" width="3.69" height="3.69"/><rect x="70.21" y="6.38" width="3.69" height="3.69"/><rect x="73.4" y="6.38" width="3.69" height="3.69"/><rect x="76.6" y="6.38" width="3.69" height="3.69"/><rect x="79.79" y="6.38" width="3.69" height="3.69"/><rect x="82.98" y="6.38" width="3.69" height="3.69"/><rect x="86.17" y="6.38" width="3.69" height="3.69"/><rect x="89.36" y="6.38" width="3.69" height="3.69"/><rect x="102.13" y="6.38" width="3.69" height="3.69"/><rect x="108.51" y="6.38" width="3.69" height="3.69"/><rect x="114.89" y="6.38" width="3.69" height="3.69"/><rect x="124.47" y="6.38" width="3.69" height="3.69"/><rect x="143.62" y="6.38" width="3.69" height="3.69"/><rect x="3.19" y="9.57" width="3.69" height="3.69"/><rect x="9.57" y="9.57" width="3.69" height="3.69"/><rect x="12.77" y="9.57" width="3.69" height="3.69"/><rect x="15.96" y="9.57" width="3.69" height="3.69"/><rect x="22.34" y="9.57" width="3.69" height="3.69"/><rect x="28.72" y="9.57" width="3.69" height="3.69"/><rect x="31.91" y="9.57" width="3.69" height="3.69"/><rect x="38.3" y="9.57" width="3.69" height="3.69"/><rect x="41.49" y="9.57" width="3.69" height="3.69"/><rect x="44.68" y="9.57" width="3.69" height="3.69"/><rect x="47.87" y="9.57" width="3.69" height="3.69"/><rect x="60.64" y="9.57" width="3.69" height="3.69"/><rect x="67.02" y="9.57" width="3.69" height="3.69"/><rect x="76.6" y="9.57" width="3.69" height="3.69"/><rect x="89.36" y="9.57" width="3.69" height="3.69"/><rect x="92.55" y="9.57" width="3.69" height="3.69"/><rect x="95.74" y="9.57" width="3.69" height="3.69"/><rect x="98.94" y="9.57" width="3.69" height="3.69"/><rect x="102.13" y="9.57" width="3.69" height="3.69"/><rect x="105.32" y="9.57" width="3.69" height="3.69"/><rect x="108.51" y="9.57" width="3.69" height="3.69"/><rect x="114.89" y="9.57" width="3.69" height="3.69"/><rect x="124.47" y="9.57" width="3.69" height="3.69"/><rect x="130.85" y="9.57" width="3.69" height="3.69"/><rect x="134.04" y="9.57" width="3.69" height="3.69"/><rect x="137.23" y="9.57" width="3.69" height="3.69"/><rect x="143.62" y="9.57" width="3.69" height="3.69"/><rect x="3.19" y="12.77" width="3.69" height="3.69"/><rect x="9.57" y="12.77" width="3.69" height="3.69"/><rect x="12.77" y="12.77" width="3.69" height="3.69"/><rect x="15.96" y="12.77" width="3.69" height="3.69"/><rect x="22.34" y="12.77" width="3.69" height="3.69"/><rect x="28.72" y="12.77" width="3.69" height="3.69"/><rect x="35.11" y="12.77" width="3.69" height="3.69"/><rect x="41.49" y="12.77" width="3.69" height="3.69"/><rect x="47.87" y="12.77" width="3.69" height="3.69"/><rect x="54.26" y="12.77" width="3.69" height="3.69"/><rect x="60.64" y="12.77" width="3.69" height="3.69"/><rect x="67.02" y="12.77" width="3.69" height="3.69"/><rect x="76.6" y="12.77" width="3.69" height="3.69"/><rect x="86.17" y="12.77" width="3.69" height="3.69"/><rect x="98.94" y="12.77" width="3.69" height="3.69"/><rect x="102.13" y="12.77" width="3.69" height="3.69"/><rect x="114.89" y="12.77" width="3.69" height="3.69"/><rect x="118.09" y="12.77" width="3.69" height="3.69"/><rect x="124.47" y="12.77" width="3.69" height="3.69"/><rect x="130.85" y="12.77" width="3.69" height="3.69"/><rect x="134.04" y="12.77" width="3.69" height="3.69"/><rect x="137.23" y="12.77" width="3.69" height="3.69"/><rect x="143.62" y="12.77" width="3.69" height="3.69"/><rect x="3.19" y="15.96" width="3.69" height="3.69"/><rect x="9.57" y="15.96" width="3.69" height="3.69"/><rect x="12.77" y="15.96" width="3.69" height="3.69"/><rect x="15.96" y="15.96" width="3.69" height="3.69"/><rect x="22.34" y="15.96" width="3.69" height="3.69"/><rect x="28.72" y="15.96" width="3.69" height="3.69"/><rect x="35.11" y="15.96" width="3.69" height="3.69"/><rect x="38.3" y="15.96" width="3.69" height="3.69"/><rect x="51.06" y="15.96" width="3.69" height="3.69"/><rect x="57.45" y="15.96" width="3.69" height="3.69"/><rect x="63.83" y="15.96" width="3.69" height="3.69"/><rect x="67.02" y="15.96" width="3.69" height="3.69"/><rect x="70.21" y="15.96" width="3.69" height="3.69"/><rect x="73.4" y="15.96" width="3.69" height="3.69"/><rect x="76.6" y="15.96" width="3.69" height="3.69"/><rect x="79.79" y="15.96" width="3.69" height="3.69"/><rect x="82.98" y="15.96" width="3.69" height="3.69"/><rect x="89.36" y="15.96" width="3.69" height="3.69"/><rect x="92.55" y="15.96" width="3.69" height="3.69"/><rect x="98.94" y="15.96" width="3.69" height="3.69"/><rect x="108.51" y="15.96" width="3.69" height="3.69"/><rect x="111.7" y="15.96" width="3.69" height="3.69"/><rect x="114.89" y="15.96" width="3.69" height="3.69"/><rect x="118.09" y="15.96" width="3.69" height="3.69"/><rect x="124.47" y="15.96" width="3.69" height="3.69"/><rect x="130.85" y="15.96" width="3.69" height="3.69"/><rect x="134.04" y="15.96" width="3.69" height="3.69"/><rect x="137.23" y="15.96" width="3.69" height="3.69"/><rect x="143.62" y="15.96" width="3.69" height="3.69"/><rect x="3.19" y="19.15" width="3.69" height="3.69"/><rect x="22.34" y="19.15" width="3.69" height="3.69"/><rect x="28.72" y="19.15" width="3.69" height="3.69"/><rect x="35.11" y="19.15" width="3.69" height="3.69"/><rect x="38.3" y="19.15" width="3.69" height="3.69"/><rect x="41.49" y="19.15" width="3.69" height="3.69"/><rect x="44.68" y="19.15" width="3.69" height="3.69"/><rect x="47.87" y="19.15" width="3.69" height="3.69"/><rect x="54.26" y="19.15" width="3.69" height="3.69"/><rect x="57.45" y="19.15" width="3.69" height="3.69"/><rect x="60.64" y="19.15" width="3.69" height="3.69"/><rect x="67.02" y="19.15" width="3.69" height="3.69"/><rect x="79.79" y="19.15" width="3.69" height="3.69"/><rect x="82.98" y="19.15" width="3.69" height="3.69"/><rect x="86.17" y="19.15" width="3.69" height="3.69"/><rect x="89.36" y="19.15" width="3.69" height="3.69"/><rect x="95.74" y="19.15" width="3.69" height="3.69"/><rect x="102.13" y="19.15" width="3.69" height="3.69"/><rect x="108.51" y="19.15" width="3.69" height="3.69"/><rect x="124.47" y="19.15" width="3.69" height="3.69"/><rect x="143.62" y="19.15" width="3.69" height="3.69"/><rect x="3.19" y="22.34" width="3.69" height="3.69"/><rect x="6.38" y="22.34" width="3.69" height="3.69"/><rect x="9.57" y="22.34" width="3.69" height="3.69"/><rect x="12.77" y="22.34" width="3.69" height="3.69"/><rect x="15.96" y="22.34" width="3.69" height="3.69"/><rect x="19.15" y="22.34" width="3.69" height="3.69"/><rect x="22.34" y="22.34" width="3.69" height="3.69"/><rect x="28.72" y="22.34" width="3.69" height="3.69"/><rect x="35.11" y="22.34" width="3.69" height="3.69"/><rect x="41.49" y="22.34" width="3.69" height="3.69"/><rect x="47.87" y="22.34" width="3.69" height="3.69"/><rect x="54.26" y="22.34" width="3.69" height="3.69"/><rect x="60.64" y="22.34" width="3.69" height="3.69"/><rect x="67.02" y="22.34" width="3.69" height="3.69"/><rect x="73.4" y="22.34" width="3.69" height="3.69"/><rect x="79.79" y="22.34" width="3.69" height="3.69"/><rect x="86.17" y="22.34" width="3.69" height="3.69"/><rect x="92.55" y="22.34" width="3.69" height="3.69"/><rect x="98.94" y="22.34" width="3.69" height="3.69"/><rect x="105.32" y="22.34" width="3.69" height="3.69"/><rect x="111.7" y="22.34" width="3.69" height="3.69"/><rect x="118.09" y="22.34" width="3.69" height="3.69"/><rect x="124.47" y="22.34" width="3.69" height="3.69"/><rect x="127.66" y="22.34" width="3.69" height="3.69"/><rect x="130.85" y="22.34" width="3.69" height="3.69"/><rect x="134.04" y="22.34" width="3.69" height="3.69"/><rect x="137.23" y="22.34" width="3.69" height="3.69"/><rect x="140.43" y="22.34" width="3.69" height="3.69"/><rect x="143.62" y="22.34" width="3.69" height="3.69"/><rect x="28.72" y="25.53" width="3.69" height="3.69"/><rect x="35.11" y="25.53" width="3.69" height="3.69"/><rect x="38.3" y="25.53" width="3.69" height="3.69"/><rect x="41.49" y="25.53" width="3.69" height="3.69"/><rect x="47.87" y="25.53" width="3.69" height="3.69"/><rect x="54.26" y="25.53" width="3.69" height="3.69"/><rect x="57.45" y="25.53" width="3.69" height="3.69"/><rect x="60.64" y="25.53" width="3.69" height="3.69"/><rect x="63.83" y="25.53" width="3.69" height="3.69"/><rect x="67.02" y="25.53" width="3.69" height="3.69"/><rect x="79.79" y="25.53" width="3.69" height="3.69"/><rect x="82.98" y="25.53" width="3.69" height="3.69"/><rect x="86.17" y="25.53" width="3.69" height="3.69"/><rect x="89.36" y="25.53" width="3.69" height="3.69"/><rect x="92.55" y="25.53" width="3.69" height="3.69"/><rect x="98.94" y="25.53" width="3.69" height="3.69"/><rect x="102.13" y="25.53" width="3.69" height="3.69"/><rect x="105.32" y="25.53" width="3.69" height="3.69"/><rect x="118.09" y="25.53" width="3.69" height="3.69"/><rect x="3.19" y="28.72" width="3.69" height="3.69"/><rect x="9.57" y="28.72" width="3.69" height="3.69"/><rect x="12.77" y="28.72" width="3.69" height="3.69"/><rect x="15.96" y="28.72" width="3.69" height="3.69"/><rect x="19.15" y="28.72" width="3.69" height="3.69"/><rect x="22.34" y="28.72" width="3.69" height="3.69"/><rect x="35.11" y="28.72" width="3.69" height="3.69"/><rect x="38.3" y="28.72" width="3.69" height="3.69"/><rect x="41.49" y="28.72" width="3.69" height="3.69"/><rect x="51.06" y="28.72" width="3.69" height="3.69"/><rect x="54.26" y="28.72" width="3.69" height="3.69"/><rect x="57.45" y="28.72" width="3.69" height="3.69"/><rect x="60.64" y="28.72" width="3.69" height="3.69"/><rect x="67.02" y="28.72" width="3.69" height="3.69"/><rect x="70.21" y="28.72" width="3.69" height="3.69"/><rect x="73.4" y="28.72" width="3.69" height="3.69"/><rect x="76.6" y="28.72" width="3.69" height="3.69"/><rect x="79.79" y="28.72" width="3.69" height="3.69"/><rect x="86.17" y="28.72" width="3.69" height="3.69"/><rect x="89.36" y="28.72" width="3.69" height="3.69"/><rect x="95.74" y="28.72" width="3.69" height="3.69"/><rect x="102.13" y="28.72" width="3.69" height="3.69"/><rect x="108.51" y="28.72" width="3.69" height="3.69"/><rect x="124.47" y="28.72" width="3.69" height="3.69"/><rect x="127.66" y="28.72" width="3.69" height="3.69"/><rect x="130.85" y="28.72" width="3.69" height="3.69"/><rect x="134.04" y="28.72" width="3.69" height="3.69"/><rect x="137.23" y="28.72" width="3.69" height="3.69"/><rect x="6.38" y="31.91" width="3.69" height="3.69"/><rect x="9.57" y="31.91" width="3.69" height="3.69"/><rect x="15.96" y="31.91" width="3.69" height="3.69"/><rect x="38.3" y="31.91" width="3.69" height="3.69"/><rect x="44.68" y="31.91" width="3.69" height="3.69"/><rect x="47.87" y="31.91" width="3.69" height="3.69"/><rect x="51.06" y="31.91" width="3.69" height="3.69"/><rect x="63.83" y="31.91" width="3.69" height="3.69"/><rect x="82.98" y="31.91" width="3.69" height="3.69"/><rect x="95.74" y="31.91" width="3.69" height="3.69"/><rect x="98.94" y="31.91" width="3.69" height="3.69"/><rect x="102.13" y="31.91" width="3.69" height="3.69"/><rect x="114.89" y="31.91" width="3.69" height="3.69"/><rect x="118.09" y="31.91" width="3.69" height="3.69"/><rect x="130.85" y="31.91" width="3.69" height="3.69"/><rect x="134.04" y="31.91" width="3.69" height="3.69"/><rect x="137.23" y="31.91" width="3.69" height="3.69"/><rect x="140.43" y="31.91" width="3.69" height="3.69"/><rect x="143.62" y="31.91" width="3.69" height="3.69"/><rect x="3.19" y="35.11" width="3.69" height="3.69"/><rect x="15.96" y="35.11" width="3.69" height="3.69"/><rect x="19.15" y="35.11" width="3.69" height="3.69"/><rect x="22.34" y="35.11" width="3.69" height="3.69"/><rect x="25.53" y="35.11" width="3.69" height="3.69"/><rect x="28.72" y="35.11" width="3.69" height="3.69"/><rect x="31.91" y="35.11" width="3.69" height="3.69"/><rect x="41.49" y="35.11" width="3.69" height="3.69"/><rect x="54.26" y="35.11" width="3.69" height="3.69"/><rect x="57.45" y="35.11" width="3.69" height="3.69"/><rect x="63.83" y="35.11" width="3.69" height="3.69"/><rect x="67.02" y="35.11" width="3.69" height="3.69"/><rect x="70.21" y="35.11" width="3.69" height="3.69"/><rect x="73.4" y="35.11" width="3.69" height="3.69"/><rect x="76.6" y="35.11" width="3.69" height="3.69"/><rect x="79.79" y="35.11" width="3.69" height="3.69"/><rect x="86.17" y="35.11" width="3.69" height="3.69"/><rect x="95.74" y="35.11" width="3.69" height="3.69"/><rect x="102.13" y="35.11" width="3.69" height="3.69"/><rect x="108.51" y="35.11" width="3.69" height="3.69"/><rect x="111.7" y="35.11" width="3.69" height="3.69"/><rect x="114.89" y="35.11" width="3.69" height="3.69"/><rect x="118.09" y="35.11" width="3.69" height="3.69"/><rect x="121.28" y="35.11" width="3.69" height="3.69"/><rect x="124.47" y="35.11" width="3.69" height="3.69"/><rect x="127.66" y="35.11" width="3.69" height="3.69"/><rect x="137.23" y="35.11" width="3.69" height="3.69"/><rect x="140.43" y="35.11" width="3.69" height="3.69"/><rect x="3.19" y="38.3" width="3.69" height="3.69"/><rect x="6.38" y="38.3" width="3.69" height="3.69"/><rect x="19.15" y="38.3" width="3.69" height="3.69"/><rect x="25.53" y="38.3" width="3.69" height="3.69"/><rect x="28.72" y="38.3" width="3.69" height="3.69"/><rect x="31.91" y="38.3" width="3.69" height="3.69"/><rect x="38.3" y="38.3" width="3.69" height="3.69"/><rect x="41.49" y="38.3" width="3.69" height="3.69"/><rect x="47.87" y="38.3" width="3.69" height="3.69"/><rect x="51.06" y="38.3" width="3.69" height="3.69"/><rect x="54.26" y="38.3" width="3.69" height="3.69"/><rect x="57.45" y="38.3" width="3.69" height="3.69"/><rect x="60.64" y="38.3" width="3.69" height="3.69"/><rect x="63.83" y="38.3" width="3.69" height="3.69"/><rect x="76.6" y="38.3" width="3.69" height="3.69"/><rect x="82.98" y="38.3" width="3.69" height="3.69"/><rect x="92.55" y="38.3" width="3.69" height="3.69"/><rect x="98.94" y="38.3" width="3.69" height="3.69"/><rect x="102.13" y="38.3" width="3.69" height="3.69"/><rect x="105.32" y="38.3" width="3.69" height="3.69"/><rect x="108.51" y="38.3" width="3.69" height="3.69"/><rect x="111.7" y="38.3" width="3.69" height="3.69"/><rect x="114.89" y="38.3" width="3.69" height="3.69"/><rect x="118.09" y="38.3" width="3.69" height="3.69"/><rect x="137.23" y="38.3" width="3.69" height="3.69"/><rect x="3.19" y="41.49" width="3.69" height="3.69"/><rect x="12.77" y="41.49" width="3.69" height="3.69"/><rect x="19.15" y="41.49" width="3.69" height="3.69"/><rect x="22.34" y="41.49" width="3.69" height="3.69"/><rect x="31.91" y="41.49" width="3.69" height="3.69"/><rect x="35.11" y="41.49" width="3.69" height="3.69"/><rect x="47.87" y="41.49" width="3.69" height="3.69"/><rect x="51.06" y="41.49" width="3.69" height="3.69"/><rect x="57.45" y="41.49" width="3.69" height="3.69"/><rect x="60.64" y="41.49" width="3.69" height="3.69"/><rect x="67.02" y="41.49" width="3.69" height="3.69"/><rect x="70.21" y="41.49" width="3.69" height="3.69"/><rect x="73.4" y="41.49" width="3.69" height="3.69"/><rect x="79.79" y="41.49" width="3.69" height="3.69"/><rect x="82.98" y="41.49" width="3.69" height="3.69"/><rect x="98.94" y="41.49" width="3.69" height="3.69"/><rect x="121.28" y="41.49" width="3.69" height="3.69"/><rect x="130.85" y="41.49" width="3.69" height="3.69"/><rect x="143.62" y="41.49" width="3.69" height="3.69"/><rect x="3.19" y="44.68" width="3.69" height="3.69"/><rect x="9.57" y="44.68" width="3.69" height="3.69"/><rect x="19.15" y="44.68" width="3.69" height="3.69"/><rect x="25.53" y="44.68" width="3.69" height="3.69"/><rect x="28.72" y="44.68" width="3.69" height="3.69"/><rect x="44.68" y="44.68" width="3.69" height="3.69"/><rect x="54.26" y="44.68" width="3.69" height="3.69"/><rect x="82.98" y="44.68" width="3.69" height="3.69"/><rect x="89.36" y="44.68" width="3.69" height="3.69"/><rect x="95.74" y="44.68" width="3.69" height="3.69"/><rect x="98.94" y="44.68" width="3.69" height="3.69"/><rect x="105.32" y="44.68" width="3.69" height="3.69"/><rect x="114.89" y="44.68" width="3.69" height="3.69"/><rect x="118.09" y="44.68" width="3.69" height="3.69"/><rect x="121.28" y="44.68" width="3.69" height="3.69"/><rect x="137.23" y="44.68" width="3.69" height="3.69"/><rect x="140.43" y="44.68" width="3.69" height="3.69"/><rect x="143.62" y="44.68" width="3.69" height="3.69"/><rect x="3.19" y="47.87" width="3.69" height="3.69"/><rect x="6.38" y="47.87" width="3.69" height="3.69"/><rect x="12.77" y="47.87" width="3.69" height="3.69"/><rect x="15.96" y="47.87" width="3.69" height="3.69"/><rect x="22.34" y="47.87" width="3.69" height="3.69"/><rect x="25.53" y="47.87" width="3.69" height="3.69"/><rect x="31.91" y="47.87" width="3.69" height="3.69"/><rect x="38.3" y="47.87" width="3.69" height="3.69"/><rect x="51.06" y="47.87" width="3.69" height="3.69"/><rect x="60.64" y="47.87" width="3.69" height="3.69"/><rect x="67.02" y="47.87" width="3.69" height="3.69"/><rect x="70.21" y="47.87" width="3.69" height="3.69"/><rect x="79.79" y="47.87" width="3.69" height="3.69"/><rect x="82.98" y="47.87" width="3.69" height="3.69"/><rect x="108.51" y="47.87" width="3.69" height="3.69"/><rect x="111.7" y="47.87" width="3.69" height="3.69"/><rect x="114.89" y="47.87" width="3.69" height="3.69"/><rect x="118.09" y="47.87" width="3.69" height="3.69"/><rect x="121.28" y="47.87" width="3.69" height="3.69"/><rect x="124.47" y="47.87" width="3.69" height="3.69"/><rect x="127.66" y="47.87" width="3.69" height="3.69"/><rect x="130.85" y="47.87" width="3.69" height="3.69"/><rect x="137.23" y="47.87" width="3.69" height="3.69"/><rect x="140.43" y="47.87" width="3.69" height="3.69"/><rect x="9.57" y="51.06" width="3.69" height="3.69"/><rect x="15.96" y="51.06" width="3.69" height="3.69"/><rect x="25.53" y="51.06" width="3.69" height="3.69"/><rect x="31.91" y="51.06" width="3.69" height="3.69"/><rect x="35.11" y="51.06" width="3.69" height="3.69"/><rect x="38.3" y="51.06" width="3.69" height="3.69"/><rect x="44.68" y="51.06" width="3.69" height="3.69"/><rect x="54.26" y="51.06" width="3.69" height="3.69"/><rect x="57.45" y="51.06" width="3.69" height="3.69"/><rect x="63.83" y="51.06" width="3.69" height="3.69"/><rect x="70.21" y="51.06" width="3.69" height="3.69"/><rect x="76.6" y="51.06" width="3.69" height="3.69"/><rect x="89.36" y="51.06" width="3.69" height="3.69"/><rect x="92.55" y="51.06" width="3.69" height="3.69"/><rect x="95.74" y="51.06" width="3.69" height="3.69"/><rect x="105.32" y="51.06" width="3.69" height="3.69"/><rect x="114.89" y="51.06" width="3.69" height="3.69"/><rect x="118.09" y="51.06" width="3.69" height="3.69"/><rect x="121.28" y="51.06" width="3.69" height="3.69"/><rect x="124.47" y="51.06" width="3.69" height="3.69"/><rect x="127.66" y="51.06" width="3.69" height="3.69"/><rect x="130.85" y="51.06" width="3.69" height="3.69"/><rect x="134.04" y="51.06" width="3.69" height="3.69"/><rect x="137.23" y="51.06" width="3.69" height="3.69"/><rect x="15.96" y="54.26" width="3.69" height="3.69"/><rect x="19.15" y="54.26" width="3.69" height="3.69"/><rect x="22.34" y="54.26" width="3.69" height="3.69"/><rect x="28.72" y="54.26" width="3.69" height="3.69"/><rect x="31.91" y="54.26" width="3.69" height="3.69"/><rect x="38.3" y="54.26" width="3.69" height="3.69"/><rect x="44.68" y="54.26" width="3.69" height="3.69"/><rect x="47.87" y="54.26" width="3.69" height="3.69"/><rect x="54.26" y="54.26" width="3.69" height="3.69"/><rect x="57.45" y="54.26" width="3.69" height="3.69"/><rect x="60.64" y="54.26" width="3.69" height="3.69"/><rect x="63.83" y="54.26" width="3.69" height="3.69"/><rect x="73.4" y="54.26" width="3.69" height="3.69"/><rect x="76.6" y="54.26" width="3.69" height="3.69"/><rect x="79.79" y="54.26" width="3.69" height="3.69"/><rect x="86.17" y="54.26" width="3.69" height="3.69"/><rect x="95.74" y="54.26" width="3.69" height="3.69"/><rect x="102.13" y="54.26" width="3.69" height="3.69"/><rect x="108.51" y="54.26" width="3.69" height="3.69"/><rect x="121.28" y="54.26" width="3.69" height="3.69"/><rect x="124.47" y="54.26" width="3.69" height="3.69"/><rect x="137.23" y="54.26" width="3.69" height="3.69"/><rect x="140.43" y="54.26" width="3.69" height="3.69"/><rect x="6.38" y="57.45" width="3.69" height="3.69"/><rect x="9.57" y="57.45" width="3.69" height="3.69"/><rect x="15.96" y="57.45" width="3.69" height="3.69"/><rect x="19.15" y="57.45" width="3.69" height="3.69"/><rect x="28.72" y="57.45" width="3.69" height="3.69"/><rect x="41.49" y="57.45" width="3.69" height="3.69"/><rect x="51.06" y="57.45" width="3.69" height="3.69"/><rect x="57.45" y="57.45" width="3.69" height="3.69"/><rect x="60.64" y="57.45" width="3.69" height="3.69"/><rect x="67.02" y="57.45" width="3.69" height="3.69"/><rect x="79.79" y="57.45" width="3.69" height="3.69"/><rect x="82.98" y="57.45" width="3.69" height="3.69"/><rect x="89.36" y="57.45" width="3.69" height="3.69"/><rect x="95.74" y="57.45" width="3.69" height="3.69"/><rect x="98.94" y="57.45" width="3.69" height="3.69"/><rect x="105.32" y="57.45" width="3.69" height="3.69"/><rect x="114.89" y="57.45" width="3.69" height="3.69"/><rect x="118.09" y="57.45" width="3.69" height="3.69"/><rect x="121.28" y="57.45" width="3.69" height="3.69"/><rect x="127.66" y="57.45" width="3.69" height="3.69"/><rect x="130.85" y="57.45" width="3.69" height="3.69"/><rect x="134.04" y="57.45" width="3.69" height="3.69"/><rect x="137.23" y="57.45" width="3.69" height="3.69"/><rect x="140.43" y="57.45" width="3.69" height="3.69"/><rect x="143.62" y="57.45" width="3.69" height="3.69"/><rect x="6.38" y="60.64" width="3.69" height="3.69"/><rect x="22.34" y="60.64" width="3.69" height="3.69"/><rect x="31.91" y="60.64" width="3.69" height="3.69"/><rect x="35.11" y="60.64" width="3.69" height="3.69"/><rect x="47.87" y="60.64" width="3.69" height="3.69"/><rect x="57.45" y="60.64" width="3.69" height="3.69"/><rect x="70.21" y="60.64" width="3.69" height="3.69"/><rect x="76.6" y="60.64" width="3.69" height="3.69"/><rect x="79.79" y="60.64" width="3.69" height="3.69"/><rect x="86.17" y="60.64" width="3.69" height="3.69"/><rect x="89.36" y="60.64" width="3.69" height="3.69"/><rect x="92.55" y="60.64" width="3.69" height="3.69"/><rect x="102.13" y="60.64" width="3.69" height="3.69"/><rect x="105.32" y="60.64" width="3.69" height="3.69"/><rect x="108.51" y="60.64" width="3.69" height="3.69"/><rect x="111.7" y="60.64" width="3.69" height="3.69"/><rect x="114.89" y="60.64" width="3.69" height="3.69"/><rect x="124.47" y="60.64" width="3.69" height="3.69"/><rect x="127.66" y="60.64" width="3.69" height="3.69"/><rect x="6.38" y="63.83" width="3.69" height="3.69"/><rect x="9.57" y="63.83" width="3.69" height="3.69"/><rect x="12.77" y="63.83" width="3.69" height="3.69"/><rect x="15.96" y="63.83" width="3.69" height="3.69"/><rect x="25.53" y="63.83" width="3.69" height="3.69"/><rect x="28.72" y="63.83" width="3.69" height="3.69"/><rect x="35.11" y="63.83" width="3.69" height="3.69"/><rect x="47.87" y="63.83" width="3.69" height="3.69"/><rect x="51.06" y="63.83" width="3.69" height="3.69"/><rect x="54.26" y="63.83" width="3.69" height="3.69"/><rect x="57.45" y="63.83" width="3.69" height="3.69"/><rect x="60.64" y="63.83" width="3.69" height="3.69"/><rect x="63.83" y="63.83" width="3.69" height="3.69"/><rect x="76.6" y="63.83" width="3.69" height="3.69"/><rect x="79.79" y="63.83" width="3.69" height="3.69"/><rect x="82.98" y="63.83" width="3.69" height="3.69"/><rect x="92.55" y="63.83" width="3.69" height="3.69"/><rect x="98.94" y="63.83" width="3.69" height="3.69"/><rect x="102.13" y="63.83" width="3.69" height="3.69"/><rect x="105.32" y="63.83" width="3.69" height="3.69"/><rect x="114.89" y="63.83" width="3.69" height="3.69"/><rect x="121.28" y="63.83" width="3.69" height="3.69"/><rect x="130.85" y="63.83" width="3.69" height="3.69"/><rect x="137.23" y="63.83" width="3.69" height="3.69"/><rect x="140.43" y="63.83" width="3.69" height="3.69"/><rect x="9.57" y="67.02" width="3.69" height="3.69"/><rect x="12.77" y="67.02" width="3.69" height="3.69"/><rect x="15.96" y="67.02" width="3.69" height="3.69"/><rect x="19.15" y="67.02" width="3.69" height="3.69"/><rect x="22.34" y="67.02" width="3.69" height="3.69"/><rect x="25.53" y="67.02" width="3.69" height="3.69"/><rect x="28.72" y="67.02" width="3.69" height="3.69"/><rect x="38.3" y="67.02" width="3.69" height="3.69"/><rect x="44.68" y="67.02" width="3.69" height="3.69"/><rect x="47.87" y="67.02" width="3.69" height="3.69"/><rect x="54.26" y="67.02" width="3.69" height="3.69"/><rect x="60.64" y="67.02" width="3.69" height="3.69"/><rect x="67.02" y="67.02" width="3.69" height="3.69"/><rect x="70.21" y="67.02" width="3.69" height="3.69"/><rect x="73.4" y="67.02" width="3.69" height="3.69"/><rect x="76.6" y="67.02" width="3.69" height="3.69"/><rect x="79.79" y="67.02" width="3.69" height="3.69"/><rect x="82.98" y="67.02" width="3.69" height="3.69"/><rect x="102.13" y="67.02" width="3.69" height="3.69"/><rect x="108.51" y="67.02" width="3.69" height="3.69"/><rect x="114.89" y="67.02" width="3.69" height="3.69"/><rect x="118.09" y="67.02" width="3.69" height="3.69"/><rect x="121.28" y="67.02" width="3.69" height="3.69"/><rect x="124.47" y="67.02" width="3.69" height="3.69"/><rect x="127.66" y="67.02" width="3.69" height="3.69"/><rect x="130.85" y="67.02" width="3.69" height="3.69"/><rect x="134.04" y="67.02" width="3.69" height="3.69"/><rect x="143.62" y="67.02" width="3.69" height="3.69"/><rect x="15.96" y="70.21" width="3.69" height="3.69"/><rect x="28.72" y="70.21" width="3.69" height="3.69"/><rect x="31.91" y="70.21" width="3.69" height="3.69"/><rect x="35.11" y="70.21" width="3.69" height="3.69"/><rect x="38.3" y="70.21" width="3.69" height="3.69"/><rect x="44.68" y="70.21" width="3.69" height="3.69"/><rect x="47.87" y="70.21" width="3.69" height="3.69"/><rect x="51.06" y="70.21" width="3.69" height="3.69"/><rect x="57.45" y="70.21" width="3.69" height="3.69"/><rect x="60.64" y="70.21" width="3.69" height="3.69"/><rect x="67.02" y="70.21" width="3.69" height="3.69"/><rect x="79.79" y="70.21" width="3.69" height="3.69"/><rect x="82.98" y="70.21" width="3.69" height="3.69"/><rect x="95.74" y="70.21" width="3.69" height="3.69"/><rect x="98.94" y="70.21" width="3.69" height="3.69"/><rect x="105.32" y="70.21" width="3.69" height="3.69"/><rect x="108.51" y="70.21" width="3.69" height="3.69"/><rect x="114.89" y="70.21" width="3.69" height="3.69"/><rect x="118.09" y="70.21" width="3.69" height="3.69"/><rect x="130.85" y="70.21" width="3.69" height="3.69"/><rect x="134.04" y="70.21" width="3.69" height="3.69"/><rect x="137.23" y="70.21" width="3.69" height="3.69"/><rect x="140.43" y="70.21" width="3.69" height="3.69"/><rect x="143.62" y="70.21" width="3.69" height="3.69"/><rect x="3.19" y="73.4" width="3.69" height="3.69"/><rect x="12.77" y="73.4" width="3.69" height="3.69"/><rect x="15.96" y="73.4" width="3.69" height="3.69"/><rect x="22.34" y="73.4" width="3.69" height="3.69"/><rect x="28.72" y="73.4" width="3.69" height="3.69"/><rect x="38.3" y="73.4" width="3.69" height="3.69"/><rect x="41.49" y="73.4" width="3.69" height="3.69"/><rect x="51.06" y="73.4" width="3.69" height="3.69"/><rect x="54.26" y="73.4" width="3.69" height="3.69"/><rect x="57.45" y="73.4" width="3.69" height="3.69"/><rect x="60.64" y="73.4" width="3.69" height="3.69"/><rect x="63.83" y="73.4" width="3.69" height="3.69"/><rect x="67.02" y="73.4" width="3.69" height="3.69"/><rect x="73.4" y="73.4" width="3.69" height="3.69"/><rect x="79.79" y="73.4" width="3.69" height="3.69"/><rect x="86.17" y="73.4" width="3.69" height="3.69"/><rect x="114.89" y="73.4" width="3.69" height="3.69"/><rect x="118.09" y="73.4" width="3.69" height="3.69"/><rect x="124.47" y="73.4" width="3.69" height="3.69"/><rect x="130.85" y="73.4" width="3.69" height="3.69"/><rect x="137.23" y="73.4" width="3.69" height="3.69"/><rect x="140.43" y="73.4" width="3.69" height="3.69"/><rect x="6.38" y="76.6" width="3.69" height="3.69"/><rect x="9.57" y="76.6" width="3.69" height="3.69"/><rect x="15.96" y="76.6" width="3.69" height="3.69"/><rect x="28.72" y="76.6" width="3.69" height="3.69"/><rect x="31.91" y="76.6" width="3.69" height="3.69"/><rect x="35.11" y="76.6" width="3.69" height="3.69"/><rect x="38.3" y="76.6" width="3.69" height="3.69"/><rect x="47.87" y="76.6" width="3.69" height="3.69"/><rect x="51.06" y="76.6" width="3.69" height="3.69"/><rect x="54.26" y="76.6" width="3.69" height="3.69"/><rect x="57.45" y="76.6" width="3.69" height="3.69"/><rect x="60.64" y="76.6" width="3.69" height="3.69"/><rect x="63.83" y="76.6" width="3.69" height="3.69"/><rect x="67.02" y="76.6" width="3.69" height="3.69"/><rect x="79.79" y="76.6" width="3.69" height="3.69"/><rect x="89.36" y="76.6" width="3.69" height="3.69"/><rect x="92.55" y="76.6" width="3.69" height="3.69"/><rect x="98.94" y="76.6" width="3.69" height="3.69"/><rect x="102.13" y="76.6" width="3.69" height="3.69"/><rect x="105.32" y="76.6" width="3.69" height="3.69"/><rect x="111.7" y="76.6" width="3.69" height="3.69"/><rect x="114.89" y="76.6" width="3.69" height="3.69"/><rect x="118.09" y="76.6" width="3.69" height="3.69"/><rect x="130.85" y="76.6" width="3.69" height="3.69"/><rect x="134.04" y="76.6" width="3.69" height="3.69"/><rect x="137.23" y="76.6" width="3.69" height="3.69"/><rect x="143.62" y="76.6" width="3.69" height="3.69"/><rect x="3.19" y="79.79" width="3.69" height="3.69"/><rect x="6.38" y="79.79" width="3.69" height="3.69"/><rect x="15.96" y="79.79" width="3.69" height="3.69"/><rect x="19.15" y="79.79" width="3.69" height="3.69"/><rect x="22.34" y="79.79" width="3.69" height="3.69"/><rect x="25.53" y="79.79" width="3.69" height="3.69"/><rect x="28.72" y="79.79" width="3.69" height="3.69"/><rect x="31.91" y="79.79" width="3.69" height="3.69"/><rect x="35.11" y="79.79" width="3.69" height="3.69"/><rect x="38.3" y="79.79" width="3.69" height="3.69"/><rect x="41.49" y="79.79" width="3.69" height="3.69"/><rect x="44.68" y="79.79" width="3.69" height="3.69"/><rect x="47.87" y="79.79" width="3.69" height="3.69"/><rect x="60.64" y="79.79" width="3.69" height="3.69"/><rect x="63.83" y="79.79" width="3.69" height="3.69"/><rect x="67.02" y="79.79" width="3.69" height="3.69"/><rect x="70.21" y="79.79" width="3.69" height="3.69"/><rect x="73.4" y="79.79" width="3.69" height="3.69"/><rect x="76.6" y="79.79" width="3.69" height="3.69"/><rect x="79.79" y="79.79" width="3.69" height="3.69"/><rect x="82.98" y="79.79" width="3.69" height="3.69"/><rect x="86.17" y="79.79" width="3.69" height="3.69"/><rect x="98.94" y="79.79" width="3.69" height="3.69"/><rect x="102.13" y="79.79" width="3.69" height="3.69"/><rect x="111.7" y="79.79" width="3.69" height="3.69"/><rect x="118.09" y="79.79" width="3.69" height="3.69"/><rect x="121.28" y="79.79" width="3.69" height="3.69"/><rect x="124.47" y="79.79" width="3.69" height="3.69"/><rect x="127.66" y="79.79" width="3.69" height="3.69"/><rect x="130.85" y="79.79" width="3.69" height="3.69"/><rect x="134.04" y="79.79" width="3.69" height="3.69"/><rect x="140.43" y="79.79" width="3.69" height="3.69"/><rect x="143.62" y="79.79" width="3.69" height="3.69"/><rect x="9.57" y="82.98" width="3.69" height="3.69"/><rect x="31.91" y="82.98" width="3.69" height="3.69"/><rect x="41.49" y="82.98" width="3.69" height="3.69"/><rect x="44.68" y="82.98" width="3.69" height="3.69"/><rect x="60.64" y="82.98" width="3.69" height="3.69"/><rect x="63.83" y="82.98" width="3.69" height="3.69"/><rect x="67.02" y="82.98" width="3.69" height="3.69"/><rect x="70.21" y="82.98" width="3.69" height="3.69"/><rect x="73.4" y="82.98" width="3.69" height="3.69"/><rect x="82.98" y="82.98" width="3.69" height="3.69"/><rect x="89.36" y="82.98" width="3.69" height="3.69"/><rect x="98.94" y="82.98" width="3.69" height="3.69"/><rect x="102.13" y="82.98" width="3.69" height="3.69"/><rect x="105.32" y="82.98" width="3.69" height="3.69"/><rect x="118.09" y="82.98" width="3.69" height="3.69"/><rect x="124.47" y="82.98" width="3.69" height="3.69"/><rect x="127.66" y="82.98" width="3.69" height="3.69"/><rect x="134.04" y="82.98" width="3.69" height="3.69"/><rect x="143.62" y="82.98" width="3.69" height="3.69"/><rect x="19.15" y="86.17" width="3.69" height="3.69"/><rect x="22.34" y="86.17" width="3.69" height="3.69"/><rect x="31.91" y="86.17" width="3.69" height="3.69"/><rect x="54.26" y="86.17" width="3.69" height="3.69"/><rect x="57.45" y="86.17" width="3.69" height="3.69"/><rect x="60.64" y="86.17" width="3.69" height="3.69"/><rect x="67.02" y="86.17" width="3.69" height="3.69"/><rect x="70.21" y="86.17" width="3.69" height="3.69"/><rect x="73.4" y="86.17" width="3.69" height="3.69"/><rect x="86.17" y="86.17" width="3.69" height="3.69"/><rect x="92.55" y="86.17" width="3.69" height="3.69"/><rect x="95.74" y="86.17" width="3.69" height="3.69"/><rect x="102.13" y="86.17" width="3.69" height="3.69"/><rect x="105.32" y="86.17" width="3.69" height="3.69"/><rect x="108.51" y="86.17" width="3.69" height="3.69"/><rect x="111.7" y="86.17" width="3.69" height="3.69"/><rect x="118.09" y="86.17" width="3.69" height="3.69"/><rect x="124.47" y="86.17" width="3.69" height="3.69"/><rect x="130.85" y="86.17" width="3.69" height="3.69"/><rect x="134.04" y="86.17" width="3.69" height="3.69"/><rect x="140.43" y="86.17" width="3.69" height="3.69"/><rect x="3.19" y="89.36" width="3.69" height="3.69"/><rect x="6.38" y="89.36" width="3.69" height="3.69"/><rect x="15.96" y="89.36" width="3.69" height="3.69"/><rect x="19.15" y="89.36" width="3.69" height="3.69"/><rect x="25.53" y="89.36" width="3.69" height="3.69"/><rect x="35.11" y="89.36" width="3.69" height="3.69"/><rect x="38.3" y="89.36" width="3.69" height="3.69"/><rect x="51.06" y="89.36" width="3.69" height="3.69"/><rect x="54.26" y="89.36" width="3.69" height="3.69"/><rect x="57.45" y="89.36" width="3.69" height="3.69"/><rect x="60.64" y="89.36" width="3.69" height="3.69"/><rect x="63.83" y="89.36" width="3.69" height="3.69"/><rect x="70.21" y="89.36" width="3.69" height="3.69"/><rect x="73.4" y="89.36" width="3.69" height="3.69"/><rect x="79.79" y="89.36" width="3.69" height="3.69"/><rect x="86.17" y="89.36" width="3.69" height="3.69"/><rect x="92.55" y="89.36" width="3.69" height="3.69"/><rect x="95.74" y="89.36" width="3.69" height="3.69"/><rect x="105.32" y="89.36" width="3.69" height="3.69"/><rect x="111.7" y="89.36" width="3.69" height="3.69"/><rect x="114.89" y="89.36" width="3.69" height="3.69"/><rect x="121.28" y="89.36" width="3.69" height="3.69"/><rect x="124.47" y="89.36" width="3.69" height="3.69"/><rect x="130.85" y="89.36" width="3.69" height="3.69"/><rect x="134.04" y="89.36" width="3.69" height="3.69"/><rect x="137.23" y="89.36" width="3.69" height="3.69"/><rect x="140.43" y="89.36" width="3.69" height="3.69"/><rect x="143.62" y="89.36" width="3.69" height="3.69"/><rect x="12.77" y="92.55" width="3.69" height="3.69"/><rect x="15.96" y="92.55" width="3.69" height="3.69"/><rect x="22.34" y="92.55" width="3.69" height="3.69"/><rect x="38.3" y="92.55" width="3.69" height="3.69"/><rect x="41.49" y="92.55" width="3.69" height="3.69"/><rect x="44.68" y="92.55" width="3.69" height="3.69"/><rect x="51.06" y="92.55" width="3.69" height="3.69"/><rect x="54.26" y="92.55" width="3.69" height="3.69"/><rect x="57.45" y="92.55" width="3.69" height="3.69"/><rect x="60.64" y="92.55" width="3.69" height="3.69"/><rect x="67.02" y="92.55" width="3.69" height="3.69"/><rect x="76.6" y="92.55" width="3.69" height="3.69"/><rect x="79.79" y="92.55" width="3.69" height="3.69"/><rect x="86.17" y="92.55" width="3.69" height="3.69"/><rect x="95.74" y="92.55" width="3.69" height="3.69"/><rect x="102.13" y="92.55" width="3.69" height="3.69"/><rect x="124.47" y="92.55" width="3.69" height="3.69"/><rect x="130.85" y="92.55" width="3.69" height="3.69"/><rect x="143.62" y="92.55" width="3.69" height="3.69"/><rect x="3.19" y="95.74" width="3.69" height="3.69"/><rect x="9.57" y="95.74" width="3.69" height="3.69"/><rect x="12.77" y="95.74" width="3.69" height="3.69"/><rect x="15.96" y="95.74" width="3.69" height="3.69"/><rect x="25.53" y="95.74" width="3.69" height="3.69"/><rect x="31.91" y="95.74" width="3.69" height="3.69"/><rect x="35.11" y="95.74" width="3.69" height="3.69"/><rect x="41.49" y="95.74" width="3.69" height="3.69"/><rect x="44.68" y="95.74" width="3.69" height="3.69"/><rect x="60.64" y="95.74" width="3.69" height="3.69"/><rect x="63.83" y="95.74" width="3.69" height="3.69"/><rect x="67.02" y="95.74" width="3.69" height="3.69"/><rect x="70.21" y="95.74" width="3.69" height="3.69"/><rect x="76.6" y="95.74" width="3.69" height="3.69"/><rect x="95.74" y="95.74" width="3.69" height="3.69"/><rect x="98.94" y="95.74" width="3.69" height="3.69"/><rect x="102.13" y="95.74" width="3.69" height="3.69"/><rect x="114.89" y="95.74" width="3.69" height="3.69"/><rect x="124.47" y="95.74" width="3.69" height="3.69"/><rect x="137.23" y="95.74" width="3.69" height="3.69"/><rect x="140.43" y="95.74" width="3.69" height="3.69"/><rect x="6.38" y="98.94" width="3.69" height="3.69"/><rect x="9.57" y="98.94" width="3.69" height="3.69"/><rect x="12.77" y="98.94" width="3.69" height="3.69"/><rect x="19.15" y="98.94" width="3.69" height="3.69"/><rect x="22.34" y="98.94" width="3.69" height="3.69"/><rect x="25.53" y="98.94" width="3.69" height="3.69"/><rect x="28.72" y="98.94" width="3.69" height="3.69"/><rect x="41.49" y="98.94" width="3.69" height="3.69"/><rect x="44.68" y="98.94" width="3.69" height="3.69"/><rect x="47.87" y="98.94" width="3.69" height="3.69"/><rect x="57.45" y="98.94" width="3.69" height="3.69"/><rect x="60.64" y="98.94" width="3.69" height="3.69"/><rect x="73.4" y="98.94" width="3.69" height="3.69"/><rect x="76.6" y="98.94" width="3.69" height="3.69"/><rect x="82.98" y="98.94" width="3.69" height="3.69"/><rect x="86.17" y="98.94" width="3.69" height="3.69"/><rect x="92.55" y="98.94" width="3.69" height="3.69"/><rect x="105.32" y="98.94" width="3.69" height="3.69"/><rect x="111.7" y="98.94" width="3.69" height="3.69"/><rect x="114.89" y="98.94" width="3.69" height="3.69"/><rect x="127.66" y="98.94" width="3.69" height="3.69"/><rect x="134.04" y="98.94" width="3.69" height="3.69"/><rect x="137.23" y="98.94" width="3.69" height="3.69"/><rect x="140.43" y="98.94" width="3.69" height="3.69"/><rect x="3.19" y="102.13" width="3.69" height="3.69"/><rect x="19.15" y="102.13" width="3.69" height="3.69"/><rect x="25.53" y="102.13" width="3.69" height="3.69"/><rect x="28.72" y="102.13" width="3.69" height="3.69"/><rect x="41.49" y="102.13" width="3.69" height="3.69"/><rect x="47.87" y="102.13" width="3.69" height="3.69"/><rect x="51.06" y="102.13" width="3.69" height="3.69"/><rect x="54.26" y="102.13" width="3.69" height="3.69"/><rect x="60.64" y="102.13" width="3.69" height="3.69"/><rect x="67.02" y="102.13" width="3.69" height="3.69"/><rect x="73.4" y="102.13" width="3.69" height="3.69"/><rect x="76.6" y="102.13" width="3.69" height="3.69"/><rect x="79.79" y="102.13" width="3.69" height="3.69"/><rect x="86.17" y="102.13" width="3.69" height="3.69"/><rect x="89.36" y="102.13" width="3.69" height="3.69"/><rect x="92.55" y="102.13" width="3.69" height="3.69"/><rect x="95.74" y="102.13" width="3.69" height="3.69"/><rect x="105.32" y="102.13" width="3.69" height="3.69"/><rect x="108.51" y="102.13" width="3.69" height="3.69"/><rect x="111.7" y="102.13" width="3.69" height="3.69"/><rect x="114.89" y="102.13" width="3.69" height="3.69"/><rect x="118.09" y="102.13" width="3.69" height="3.69"/><rect x="124.47" y="102.13" width="3.69" height="3.69"/><rect x="127.66" y="102.13" width="3.69" height="3.69"/><rect x="137.23" y="102.13" width="3.69" height="3.69"/><rect x="3.19" y="105.32" width="3.69" height="3.69"/><rect x="6.38" y="105.32" width="3.69" height="3.69"/><rect x="9.57" y="105.32" width="3.69" height="3.69"/><rect x="12.77" y="105.32" width="3.69" height="3.69"/><rect x="15.96" y="105.32" width="3.69" height="3.69"/><rect x="19.15" y="105.32" width="3.69" height="3.69"/><rect x="22.34" y="105.32" width="3.69" height="3.69"/><rect x="25.53" y="105.32" width="3.69" height="3.69"/><rect x="28.72" y="105.32" width="3.69" height="3.69"/><rect x="31.91" y="105.32" width="3.69" height="3.69"/><rect x="38.3" y="105.32" width="3.69" height="3.69"/><rect x="44.68" y="105.32" width="3.69" height="3.69"/><rect x="51.06" y="105.32" width="3.69" height="3.69"/><rect x="57.45" y="105.32" width="3.69" height="3.69"/><rect x="82.98" y="105.32" width="3.69" height="3.69"/><rect x="95.74" y="105.32" width="3.69" height="3.69"/><rect x="124.47" y="105.32" width="3.69" height="3.69"/><rect x="127.66" y="105.32" width="3.69" height="3.69"/><rect x="130.85" y="105.32" width="3.69" height="3.69"/><rect x="134.04" y="105.32" width="3.69" height="3.69"/><rect x="3.19" y="108.51" width="3.69" height="3.69"/><rect x="6.38" y="108.51" width="3.69" height="3.69"/><rect x="28.72" y="108.51" width="3.69" height="3.69"/><rect x="31.91" y="108.51" width="3.69" height="3.69"/><rect x="38.3" y="108.51" width="3.69" height="3.69"/><rect x="41.49" y="108.51" width="3.69" height="3.69"/><rect x="51.06" y="108.51" width="3.69" height="3.69"/><rect x="60.64" y="108.51" width="3.69" height="3.69"/><rect x="63.83" y="108.51" width="3.69" height="3.69"/><rect x="67.02" y="108.51" width="3.69" height="3.69"/><rect x="73.4" y="108.51" width="3.69" height="3.69"/><rect x="76.6" y="108.51" width="3.69" height="3.69"/><rect x="79.79" y="108.51" width="3.69" height="3.69"/><rect x="82.98" y="108.51" width="3.69" height="3.69"/><rect x="92.55" y="108.51" width="3.69" height="3.69"/><rect x="95.74" y="108.51" width="3.69" height="3.69"/><rect x="98.94" y="108.51" width="3.69" height="3.69"/><rect x="102.13" y="108.51" width="3.69" height="3.69"/><rect x="105.32" y="108.51" width="3.69" height="3.69"/><rect x="121.28" y="108.51" width="3.69" height="3.69"/><rect x="127.66" y="108.51" width="3.69" height="3.69"/><rect x="134.04" y="108.51" width="3.69" height="3.69"/><rect x="137.23" y="108.51" width="3.69" height="3.69"/><rect x="140.43" y="108.51" width="3.69" height="3.69"/><rect x="15.96" y="111.7" width="3.69" height="3.69"/><rect x="22.34" y="111.7" width="3.69" height="3.69"/><rect x="31.91" y="111.7" width="3.69" height="3.69"/><rect x="35.11" y="111.7" width="3.69" height="3.69"/><rect x="44.68" y="111.7" width="3.69" height="3.69"/><rect x="47.87" y="111.7" width="3.69" height="3.69"/><rect x="54.26" y="111.7" width="3.69" height="3.69"/><rect x="57.45" y="111.7" width="3.69" height="3.69"/><rect x="60.64" y="111.7" width="3.69" height="3.69"/><rect x="67.02" y="111.7" width="3.69" height="3.69"/><rect x="73.4" y="111.7" width="3.69" height="3.69"/><rect x="86.17" y="111.7" width="3.69" height="3.69"/><rect x="89.36" y="111.7" width="3.69" height="3.69"/><rect x="111.7" y="111.7" width="3.69" height="3.69"/><rect x="114.89" y="111.7" width="3.69" height="3.69"/><rect x="118.09" y="111.7" width="3.69" height="3.69"/><rect x="121.28" y="111.7" width="3.69" height="3.69"/><rect x="127.66" y="111.7" width="3.69" height="3.69"/><rect x="130.85" y="111.7" width="3.69" height="3.69"/><rect x="134.04" y="111.7" width="3.69" height="3.69"/><rect x="140.43" y="111.7" width="3.69" height="3.69"/><rect x="6.38" y="114.89" width="3.69" height="3.69"/><rect x="9.57" y="114.89" width="3.69" height="3.69"/><rect x="12.77" y="114.89" width="3.69" height="3.69"/><rect x="15.96" y="114.89" width="3.69" height="3.69"/><rect x="25.53" y="114.89" width="3.69" height="3.69"/><rect x="28.72" y="114.89" width="3.69" height="3.69"/><rect x="31.91" y="114.89" width="3.69" height="3.69"/><rect x="35.11" y="114.89" width="3.69" height="3.69"/><rect x="41.49" y="114.89" width="3.69" height="3.69"/><rect x="51.06" y="114.89" width="3.69" height="3.69"/><rect x="57.45" y="114.89" width="3.69" height="3.69"/><rect x="60.64" y="114.89" width="3.69" height="3.69"/><rect x="67.02" y="114.89" width="3.69" height="3.69"/><rect x="76.6" y="114.89" width="3.69" height="3.69"/><rect x="79.79" y="114.89" width="3.69" height="3.69"/><rect x="82.98" y="114.89" width="3.69" height="3.69"/><rect x="89.36" y="114.89" width="3.69" height="3.69"/><rect x="98.94" y="114.89" width="3.69" height="3.69"/><rect x="102.13" y="114.89" width="3.69" height="3.69"/><rect x="105.32" y="114.89" width="3.69" height="3.69"/><rect x="108.51" y="114.89" width="3.69" height="3.69"/><rect x="114.89" y="114.89" width="3.69" height="3.69"/><rect x="118.09" y="114.89" width="3.69" height="3.69"/><rect x="124.47" y="114.89" width="3.69" height="3.69"/><rect x="127.66" y="114.89" width="3.69" height="3.69"/><rect x="130.85" y="114.89" width="3.69" height="3.69"/><rect x="134.04" y="114.89" width="3.69" height="3.69"/><rect x="143.62" y="114.89" width="3.69" height="3.69"/><rect x="3.19" y="118.09" width="3.69" height="3.69"/><rect x="12.77" y="118.09" width="3.69" height="3.69"/><rect x="15.96" y="118.09" width="3.69" height="3.69"/><rect x="22.34" y="118.09" width="3.69" height="3.69"/><rect x="25.53" y="118.09" width="3.69" height="3.69"/><rect x="35.11" y="118.09" width="3.69" height="3.69"/><rect x="54.26" y="118.09" width="3.69" height="3.69"/><rect x="57.45" y="118.09" width="3.69" height="3.69"/><rect x="60.64" y="118.09" width="3.69" height="3.69"/><rect x="67.02" y="118.09" width="3.69" height="3.69"/><rect x="70.21" y="118.09" width="3.69" height="3.69"/><rect x="73.4" y="118.09" width="3.69" height="3.69"/><rect x="76.6" y="118.09" width="3.69" height="3.69"/><rect x="79.79" y="118.09" width="3.69" height="3.69"/><rect x="82.98" y="118.09" width="3.69" height="3.69"/><rect x="95.74" y="118.09" width="3.69" height="3.69"/><rect x="102.13" y="118.09" width="3.69" height="3.69"/><rect x="111.7" y="118.09" width="3.69" height="3.69"/><rect x="118.09" y="118.09" width="3.69" height="3.69"/><rect x="121.28" y="118.09" width="3.69" height="3.69"/><rect x="124.47" y="118.09" width="3.69" height="3.69"/><rect x="127.66" y="118.09" width="3.69" height="3.69"/><rect x="130.85" y="118.09" width="3.69" height="3.69"/><rect x="134.04" y="118.09" width="3.69" height="3.69"/><rect x="143.62" y="118.09" width="3.69" height="3.69"/><rect x="28.72" y="121.28" width="3.69" height="3.69"/><rect x="35.11" y="121.28" width="3.69" height="3.69"/><rect x="41.49" y="121.28" width="3.69" height="3.69"/><rect x="44.68" y="121.28" width="3.69" height="3.69"/><rect x="51.06" y="121.28" width="3.69" height="3.69"/><rect x="57.45" y="121.28" width="3.69" height="3.69"/><rect x="60.64" y="121.28" width="3.69" height="3.69"/><rect x="67.02" y="121.28" width="3.69" height="3.69"/><rect x="79.79" y="121.28" width="3.69" height="3.69"/><rect x="95.74" y="121.28" width="3.69" height="3.69"/><rect x="98.94" y="121.28" width="3.69" height="3.69"/><rect x="105.32" y="121.28" width="3.69" height="3.69"/><rect x="108.51" y="121.28" width="3.69" height="3.69"/><rect x="114.89" y="121.28" width="3.69" height="3.69"/><rect x="118.09" y="121.28" width="3.69" height="3.69"/><rect x="130.85" y="121.28" width="3.69" height="3.69"/><rect x="134.04" y="121.28" width="3.69" height="3.69"/><rect x="137.23" y="121.28" width="3.69" height="3.69"/><rect x="143.62" y="121.28" width="3.69" height="3.69"/><rect x="3.19" y="124.47" width="3.69" height="3.69"/><rect x="6.38" y="124.47" width="3.69" height="3.69"/><rect x="9.57" y="124.47" width="3.69" height="3.69"/><rect x="12.77" y="124.47" width="3.69" height="3.69"/><rect x="15.96" y="124.47" width="3.69" height="3.69"/><rect x="19.15" y="124.47" width="3.69" height="3.69"/><rect x="22.34" y="124.47" width="3.69" height="3.69"/><rect x="31.91" y="124.47" width="3.69" height="3.69"/><rect x="44.68" y="124.47" width="3.69" height="3.69"/><rect x="47.87" y="124.47" width="3.69" height="3.69"/><rect x="51.06" y="124.47" width="3.69" height="3.69"/><rect x="57.45" y="124.47" width="3.69" height="3.69"/><rect x="60.64" y="124.47" width="3.69" height="3.69"/><rect x="63.83" y="124.47" width="3.69" height="3.69"/><rect x="67.02" y="124.47" width="3.69" height="3.69"/><rect x="73.4" y="124.47" width="3.69" height="3.69"/><rect x="79.79" y="124.47" width="3.69" height="3.69"/><rect x="86.17" y="124.47" width="3.69" height="3.69"/><rect x="98.94" y="124.47" width="3.69" height="3.69"/><rect x="102.13" y="124.47" width="3.69" height="3.69"/><rect x="108.51" y="124.47" width="3.69" height="3.69"/><rect x="111.7" y="124.47" width="3.69" height="3.69"/><rect x="114.89" y="124.47" width="3.69" height="3.69"/><rect x="118.09" y="124.47" width="3.69" height="3.69"/><rect x="124.47" y="124.47" width="3.69" height="3.69"/><rect x="130.85" y="124.47" width="3.69" height="3.69"/><rect x="137.23" y="124.47" width="3.69" height="3.69"/><rect x="140.43" y="124.47" width="3.69" height="3.69"/><rect x="3.19" y="127.66" width="3.69" height="3.69"/><rect x="22.34" y="127.66" width="3.69" height="3.69"/><rect x="28.72" y="127.66" width="3.69" height="3.69"/><rect x="31.91" y="127.66" width="3.69" height="3.69"/><rect x="38.3" y="127.66" width="3.69" height="3.69"/><rect x="41.49" y="127.66" width="3.69" height="3.69"/><rect x="51.06" y="127.66" width="3.69" height="3.69"/><rect x="57.45" y="127.66" width="3.69" height="3.69"/><rect x="60.64" y="127.66" width="3.69" height="3.69"/><rect x="63.83" y="127.66" width="3.69" height="3.69"/><rect x="67.02" y="127.66" width="3.69" height="3.69"/><rect x="79.79" y="127.66" width="3.69" height="3.69"/><rect x="82.98" y="127.66" width="3.69" height="3.69"/><rect x="86.17" y="127.66" width="3.69" height="3.69"/><rect x="89.36" y="127.66" width="3.69" height="3.69"/><rect x="92.55" y="127.66" width="3.69" height="3.69"/><rect x="95.74" y="127.66" width="3.69" height="3.69"/><rect x="102.13" y="127.66" width="3.69" height="3.69"/><rect x="105.32" y="127.66" width="3.69" height="3.69"/><rect x="108.51" y="127.66" width="3.69" height="3.69"/><rect x="114.89" y="127.66" width="3.69" height="3.69"/><rect x="118.09" y="127.66" width="3.69" height="3.69"/><rect x="130.85" y="127.66" width="3.69" height="3.69"/><rect x="134.04" y="127.66" width="3.69" height="3.69"/><rect x="137.23" y="127.66" width="3.69" height="3.69"/><rect x="140.43" y="127.66" width="3.69" height="3.69"/><rect x="3.19" y="130.85" width="3.69" height="3.69"/><rect x="9.57" y="130.85" width="3.69" height="3.69"/><rect x="12.77" y="130.85" width="3.69" height="3.69"/><rect x="15.96" y="130.85" width="3.69" height="3.69"/><rect x="22.34" y="130.85" width="3.69" height="3.69"/><rect x="28.72" y="130.85" width="3.69" height="3.69"/><rect x="35.11" y="130.85" width="3.69" height="3.69"/><rect x="38.3" y="130.85" width="3.69" height="3.69"/><rect x="44.68" y="130.85" width="3.69" height="3.69"/><rect x="51.06" y="130.85" width="3.69" height="3.69"/><rect x="67.02" y="130.85" width="3.69" height="3.69"/><rect x="70.21" y="130.85" width="3.69" height="3.69"/><rect x="73.4" y="130.85" width="3.69" height="3.69"/><rect x="76.6" y="130.85" width="3.69" height="3.69"/><rect x="79.79" y="130.85" width="3.69" height="3.69"/><rect x="82.98" y="130.85" width="3.69" height="3.69"/><rect x="86.17" y="130.85" width="3.69" height="3.69"/><rect x="95.74" y="130.85" width="3.69" height="3.69"/><rect x="98.94" y="130.85" width="3.69" height="3.69"/><rect x="111.7" y="130.85" width="3.69" height="3.69"/><rect x="114.89" y="130.85" width="3.69" height="3.69"/><rect x="118.09" y="130.85" width="3.69" height="3.69"/><rect x="121.28" y="130.85" width="3.69" height="3.69"/><rect x="124.47" y="130.85" width="3.69" height="3.69"/><rect x="127.66" y="130.85" width="3.69" height="3.69"/><rect x="130.85" y="130.85" width="3.69" height="3.69"/><rect x="134.04" y="130.85" width="3.69" height="3.69"/><rect x="140.43" y="130.85" width="3.69" height="3.69"/><rect x="3.19" y="134.04" width="3.69" height="3.69"/><rect x="9.57" y="134.04" width="3.69" height="3.69"/><rect x="12.77" y="134.04" width="3.69" height="3.69"/><rect x="15.96" y="134.04" width="3.69" height="3.69"/><rect x="22.34" y="134.04" width="3.69" height="3.69"/><rect x="28.72" y="134.04" width="3.69" height="3.69"/><rect x="31.91" y="134.04" width="3.69" height="3.69"/><rect x="51.06" y="134.04" width="3.69" height="3.69"/><rect x="54.26" y="134.04" width="3.69" height="3.69"/><rect x="57.45" y="134.04" width="3.69" height="3.69"/><rect x="60.64" y="134.04" width="3.69" height="3.69"/><rect x="63.83" y="134.04" width="3.69" height="3.69"/><rect x="67.02" y="134.04" width="3.69" height="3.69"/><rect x="82.98" y="134.04" width="3.69" height="3.69"/><rect x="92.55" y="134.04" width="3.69" height="3.69"/><rect x="95.74" y="134.04" width="3.69" height="3.69"/><rect x="98.94" y="134.04" width="3.69" height="3.69"/><rect x="124.47" y="134.04" width="3.69" height="3.69"/><rect x="130.85" y="134.04" width="3.69" height="3.69"/><rect x="134.04" y="134.04" width="3.69" height="3.69"/><rect x="137.23" y="134.04" width="3.69" height="3.69"/><rect x="140.43" y="134.04" width="3.69" height="3.69"/><rect x="3.19" y="137.23" width="3.69" height="3.69"/><rect x="9.57" y="137.23" width="3.69" height="3.69"/><rect x="12.77" y="137.23" width="3.69" height="3.69"/><rect x="15.96" y="137.23" width="3.69" height="3.69"/><rect x="22.34" y="137.23" width="3.69" height="3.69"/><rect x="28.72" y="137.23" width="3.69" height="3.69"/><rect x="31.91" y="137.23" width="3.69" height="3.69"/><rect x="38.3" y="137.23" width="3.69" height="3.69"/><rect x="47.87" y="137.23" width="3.69" height="3.69"/><rect x="51.06" y="137.23" width="3.69" height="3.69"/><rect x="57.45" y="137.23" width="3.69" height="3.69"/><rect x="60.64" y="137.23" width="3.69" height="3.69"/><rect x="63.83" y="137.23" width="3.69" height="3.69"/><rect x="67.02" y="137.23" width="3.69" height="3.69"/><rect x="73.4" y="137.23" width="3.69" height="3.69"/><rect x="76.6" y="137.23" width="3.69" height="3.69"/><rect x="86.17" y="137.23" width="3.69" height="3.69"/><rect x="95.74" y="137.23" width="3.69" height="3.69"/><rect x="102.13" y="137.23" width="3.69" height="3.69"/><rect x="111.7" y="137.23" width="3.69" height="3.69"/><rect x="121.28" y="137.23" width="3.69" height="3.69"/><rect x="137.23" y="137.23" width="3.69" height="3.69"/><rect x="140.43" y="137.23" width="3.69" height="3.69"/><rect x="3.19" y="140.43" width="3.69" height="3.69"/><rect x="22.34" y="140.43" width="3.69" height="3.69"/><rect x="31.91" y="140.43" width="3.69" height="3.69"/><rect x="35.11" y="140.43" width="3.69" height="3.69"/><rect x="47.87" y="140.43" width="3.69" height="3.69"/><rect x="51.06" y="140.43" width="3.69" height="3.69"/><rect x="57.45" y="140.43" width="3.69" height="3.69"/><rect x="67.02" y="140.43" width="3.69" height="3.69"/><rect x="73.4" y="140.43" width="3.69" height="3.69"/><rect x="79.79" y="140.43" width="3.69" height="3.69"/><rect x="82.98" y="140.43" width="3.69" height="3.69"/><rect x="92.55" y="140.43" width="3.69" height="3.69"/><rect x="95.74" y="140.43" width="3.69" height="3.69"/><rect x="98.94" y="140.43" width="3.69" height="3.69"/><rect x="102.13" y="140.43" width="3.69" height="3.69"/><rect x="108.51" y="140.43" width="3.69" height="3.69"/><rect x="114.89" y="140.43" width="3.69" height="3.69"/><rect x="118.09" y="140.43" width="3.69" height="3.69"/><rect x="137.23" y="140.43" width="3.69" height="3.69"/><rect x="3.19" y="143.62" width="3.69" height="3.69"/><rect x="6.38" y="143.62" width="3.69" height="3.69"/><rect x="9.57" y="143.62" width="3.69" height="3.69"/><rect x="12.77" y="143.62" width="3.69" height="3.69"/><rect x="15.96" y="143.62" width="3.69" height="3.69"/><rect x="19.15" y="143.62" width="3.69" height="3.69"/><rect x="22.34" y="143.62" width="3.69" height="3.69"/><rect x="28.72" y="143.62" width="3.69" height="3.69"/><rect x="35.11" y="143.62" width="3.69" height="3.69"/><rect x="44.68" y="143.62" width="3.69" height="3.69"/><rect x="54.26" y="143.62" width="3.69" height="3.69"/><rect x="57.45" y="143.62" width="3.69" height="3.69"/><rect x="60.64" y="143.62" width="3.69" height="3.69"/><rect x="63.83" y="143.62" width="3.69" height="3.69"/><rect x="73.4" y="143.62" width="3.69" height="3.69"/><rect x="76.6" y="143.62" width="3.69" height="3.69"/><rect x="79.79" y="143.62" width="3.69" height="3.69"/><rect x="89.36" y="143.62" width="3.69" height="3.69"/><rect x="102.13" y="143.62" width="3.69" height="3.69"/><rect x="108.51" y="143.62" width="3.69" height="3.69"/><rect x="111.7" y="143.62" width="3.69" height="3.69"/><rect x="118.09" y="143.62" width="3.69" height="3.69"/><rect x="124.47" y="143.62" width="3.69" height="3.69"/><rect x="140.43" y="143.62" width="3.69" height="3.69"/></g></svg>
+          </div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:8px;font-weight:600;">اضغط للانتقال للنموذج مباشرةً</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ الخدمات -->
+<div class="section-card">
+  <div class="section-head"><div class="section-num">٣</div><div class="section-info"><h2>اختيار الخدمات الإضافية</h2><p>حدد الخدمات وأدخل الكمية — الإجمالي يُحسب تلقائياً</p></div></div>
+  <div class="section-body">
+    <div class="svc-group">
+      <div class="svc-group-hdr">خدمات الإرسال</div>
+      <div class="svc-row" id="r-ship"><div class="svc-check"><input type="checkbox" id="c-ship" data-p="115"><div class="custom-svc-box"></div><span class="svc-name">إرسال الوثائق إلى المدن داخل المملكة عن طريق البريد</span></div><div class="svc-right"><span class="svc-badge">115 ر.س</span><input type="number" class="svc-qty" id="q-ship" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+    </div>
+    <div class="svc-group">
+      <div class="svc-group-hdr">إصدار الوثائق والشهادات</div>
+      <div class="svc-row" id="r-c1"><div class="svc-check"><input type="checkbox" id="c-c1" data-p="460"><div class="custom-svc-box"></div><span class="svc-name">إصدار شهادة تخرج — بدل تالف / بدل فاقد / تعديل بيانات</span></div><div class="svc-right"><span class="svc-badge">460 ر.س</span><input type="number" class="svc-qty" id="q-c1" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+      <div class="svc-row" id="r-c2"><div class="svc-check"><input type="checkbox" id="c-c2" data-p="1725"><div class="custom-svc-box"></div><span class="svc-name">إصدار شهادة تخرج إضافية بعد المرة الأولى — بدل تالف / بدل فاقد / تعديل</span></div><div class="svc-right"><span class="svc-badge">1,725 ر.س</span><input type="number" class="svc-qty" id="q-c2" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+      <div class="svc-row" id="r-copy"><div class="svc-check"><input type="checkbox" id="c-copy" data-p="11.5"><div class="custom-svc-box"></div><span class="svc-name">إصدار صورة طبق الأصل ومصدقة من شهادة التخرج</span></div><div class="svc-right"><span class="svc-badge">11.50 ر.س</span><input type="number" class="svc-qty" id="q-copy" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+      <div class="svc-row" id="r-trans"><div class="svc-check"><input type="checkbox" id="c-trans" data-p="23"><div class="custom-svc-box"></div><span class="svc-name">إصدار سجل أكاديمي — عربي أو إنجليزي، صورة طبق الأصل</span></div><div class="svc-right"><span class="svc-badge">23 ر.س</span><input type="number" class="svc-qty" id="q-trans" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+    </div>
+    <div class="svc-group">
+      <div class="svc-group-hdr">الإفادات وتصديق الشهادات</div>
+      <div class="svc-row" id="r-grad"><div class="svc-check"><input type="checkbox" id="c-grad" data-p="23"><div class="custom-svc-box"></div><span class="svc-name">إصدار إفادة لمن يهمه الأمر (إفادة خريج)</span></div><div class="svc-right"><span class="svc-badge">23 ر.س</span><input type="number" class="svc-qty" id="q-grad" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+      <div class="svc-row" id="r-eng"><div class="svc-check"><input type="checkbox" id="c-eng" data-p="23"><div class="custom-svc-box"></div><span class="svc-name">إصدار خطاب إثبات دراسة باللغة الإنجليزية</span></div><div class="svc-right"><span class="svc-badge">23 ر.س</span><input type="number" class="svc-qty" id="q-eng" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+      <div class="svc-row" id="r-wes"><div class="svc-check"><input type="checkbox" id="c-wes" data-p="23"><div class="custom-svc-box"></div><span class="svc-name">تعبئة وتصديق نموذج WES (World Education Services) للمبتعثين</span></div><div class="svc-right"><span class="svc-badge">23 ر.س</span><input type="number" class="svc-qty" id="q-wes" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+      <div class="svc-row" id="r-ver"><div class="svc-check"><input type="checkbox" id="c-ver" data-p="23"><div class="custom-svc-box"></div><span class="svc-name">تعبئة وتصديق نموذج التحقق من صحة معلومات الخريج للجهات داخل أو خارج المملكة</span></div><div class="svc-right"><span class="svc-badge">23 ر.س</span><input type="number" class="svc-qty" id="q-ver" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+      <div class="svc-row" id="r-cust"><div class="svc-check"><input type="checkbox" id="c-cust" data-p="115"><div class="custom-svc-box"></div><span class="svc-name">إصدار إفادات مخصصة تتطلب صياغة خاصة</span></div><div class="svc-right"><span class="svc-badge">115 ر.س</span><input type="number" class="svc-qty" id="q-cust" value="1" min="1" max="99" disabled onclick="event.stopPropagation()" onchange="calcTot()"></div></div>
+    </div>
+    <div class="totals-box">
+      <div class="tot-row"><span class="tl">المجموع الجزئي</span><span class="tv" id="t-sub">0.00 ر.س</span></div>
+      <div class="tot-row"><span class="tl">ضريبة القيمة المضافة (15%)</span><span class="tv" id="t-vat">0.00 ر.س</span></div>
+      <div class="tot-divider"></div>
+      <div class="tot-row final"><span class="tl">الإجمالي شامل الضريبة</span><span class="tv" id="t-tot">0.00 ر.س</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ الملفات -->
+<div class="section-card">
+  <div class="section-head"><div class="section-num">٤</div><div class="section-info"><h2>رفع المستندات الداعمة</h2><p>PDF أو JPG أو PNG — الحد الأقصى 5 ميجابايت لكل ملف</p></div></div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div class="fgroup">
+        <label class="flabel">صورة الهوية الوطنية / الإقامة <span class="req">*</span></label>
+        <div class="upload-zone" id="uz-id"><input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="pickFile(this,'uz-id','fn-id')"><span class="uz-icon">🪪</span><div class="uz-title">انقر أو اسحب الملف هنا</div><div class="uz-hint">PDF · JPG · PNG — حتى 5 MB</div><div class="uz-fname" id="fn-id"></div></div>
+        <span class="errmsg" id="e-idfile">يُرجى رفع صورة الهوية</span>
+      </div>
+      <div class="fgroup">
+        <label class="flabel">صورة جواز السفر</label>
+        <div class="upload-zone" id="uz-pass"><input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="pickFile(this,'uz-pass','fn-pass')"><span class="uz-icon">📗</span><div class="uz-title">انقر أو اسحب الملف هنا</div><div class="uz-hint">PDF · JPG · PNG — حتى 5 MB</div><div class="uz-fname" id="fn-pass"></div></div>
+      </div>
+      <div class="fgroup col-full">
+        <label class="flabel">مستندات داعمة إضافية</label>
+        <div class="upload-zone" id="uz-extra"><input type="file" accept=".pdf,.jpg,.jpeg,.png" multiple onchange="pickFile(this,'uz-extra','fn-extra')"><span class="uz-icon">📎</span><div class="uz-title">انقر لرفع ملفات إضافية</div><div class="uz-hint">يمكن رفع أكثر من ملف — PDF · JPG · PNG</div><div class="uz-fname" id="fn-extra"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ العنوان -->
+<div class="section-card">
+  <div class="section-head"><div class="section-num">٥</div><div class="section-info"><h2>بيانات العنوان البريدي</h2><p>مطلوب فقط عند اختيار خدمة الإرسال بالبريد</p></div></div>
+  <div class="section-body">
+    <div id="addr-info" class="infobox"><span style="font-size:15px;flex-shrink:0">ℹ️</span><p>لم تختر خدمة الإرسال بعد — ستظهر الحقول تلقائياً عند تحديد تلك الخدمة.</p></div>
+    <div id="addr-fields" style="display:none">
+      <div class="grid-2">
+        <div class="fgroup"><label class="flabel">الاسم الكامل (المستلم) <span class="req">*</span></label><input class="finput" id="f-aname" type="text" placeholder="اسم المستلم كاملاً"><span class="errmsg" id="e-aname">هذا الحقل مطلوب</span></div>
+        <div class="fgroup"><label class="flabel">المدينة <span class="req">*</span></label><input class="finput" id="f-acity" type="text" placeholder="مثال: الدمام"><span class="errmsg" id="e-acity">هذا الحقل مطلوب</span></div>
+        <div class="fgroup"><label class="flabel">اسم الحي <span class="req">*</span></label><input class="finput" id="f-adist" type="text" placeholder="مثال: حي الشاطئ"><span class="errmsg" id="e-adist">هذا الحقل مطلوب</span></div>
+        <div class="fgroup"><label class="flabel">رقم الجوال <span class="req">*</span></label><input class="finput" id="f-aphone" type="tel" placeholder="05xxxxxxxx" dir="ltr"><span class="errmsg" id="e-aphone">هذا الحقل مطلوب</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ التعليمات والتعهد -->
+<div class="section-card">
+  <div class="section-head"><div class="section-num">٦</div><div class="section-info"><h2>التعليمات والتعهد والإقرار</h2><p>يُرجى قراءة التعليمات ونص التعهد والتوقيع</p></div></div>
+  <div class="section-body">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:18px 16px;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+        <div style="width:30px;height:30px;min-width:30px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div><div style="font-size:13px;font-weight:800;color:var(--navy);">التعليمات</div><div style="font-size:11px;color:var(--text-3);margin-top:1px;">يُرجى الاطلاع على جميع التعليمات قبل الإرسال</div></div>
+      </div>
+      <div style="font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:8px;">يتم تقديم الاستمارة عبر البريد الإلكتروني على:</div>
+      <div style="background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:8px;padding:8px 14px;margin-bottom:14px;font-size:13px;font-weight:800;color:var(--navy);direction:ltr;text-align:center;">DGS.Graduate@iau.edu.sa</div>
+      <ol style="padding-right:16px;display:flex;flex-direction:column;gap:12px;">
+        <li style="font-size:12.5px;font-weight:600;color:var(--text-1);line-height:1.7;">يجب التأكد من تعبئة جميع البيانات والتعهدات المطلوبة في الاستمارة قبل التقديم.</li>
+        <li style="font-size:12.5px;font-weight:600;color:var(--text-1);line-height:1.7;">تُرفق المستندات الداعمة بحسب نوع الخدمة مع إيصال سداد رسوم الخدمة:
+          <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 12px;"><div style="font-size:11.5px;font-weight:800;color:var(--navy);margin-bottom:6px;">في حال إصدار شهادة تخرج (بدل تالف/فاقد/تعديل):</div><ul style="padding-right:14px;display:flex;flex-direction:column;gap:3px;"><li style="font-size:12px;color:var(--text-2);">صورة الهوية الوطنية أو الإقامة</li><li style="font-size:12px;color:var(--text-2);">صورة جواز السفر</li><li style="font-size:12px;color:var(--text-2);">صورة الوثيقة المطلوب إعادة إصدارها (إن وجدت)</li><li style="font-size:12px;color:var(--text-2);">المستندات الرسمية الداعمة في حال تعديل الاسم</li></ul></div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 12px;"><div style="font-size:11.5px;font-weight:800;color:var(--navy);margin-bottom:6px;">في حال إصدار إفادة أو تصديق نموذج WES:</div><ul style="padding-right:14px;"><li style="font-size:12px;color:var(--text-2);">نسخة واضحة من الوثائق والنماذج وخطاب تفويض الطالب للجهة المختصة</li></ul></div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 12px;"><div style="font-size:11.5px;font-weight:800;color:var(--navy);margin-bottom:6px;">في حال طلب الإرسال داخل المملكة أو خارجها:</div><ul style="padding-right:14px;display:flex;flex-direction:column;gap:3px;"><li style="font-size:12px;color:var(--text-2);">تعبئة نموذج العنوان البريدي باللغة العربية والإنجليزية</li><li style="font-size:12px;color:var(--text-2);">التأكد من صحة البيانات</li></ul></div>
+          </div>
+        </li>
+        <li style="font-size:12.5px;font-weight:600;color:var(--text-1);line-height:1.7;">يمكن للخريج تعديل بيانات الشهادة <strong style="color:var(--gold);">مجاناً</strong> خلال <strong>30 يوماً</strong> من تاريخ الاستلام.</li>
+        <li style="font-size:12.5px;font-weight:600;color:var(--text-1);line-height:1.7;">الرسوم <strong style="color:var(--error);">غير مستردة</strong> بعد تنفيذ الخدمة.</li>
+        <li style="font-size:12.5px;font-weight:600;color:var(--text-1);line-height:1.7;">يجب تحويل الرسوم إلى الحساب البنكي أدناه مع إرفاق إيصال السداد:
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-top:10px;">
+            <div style="font-size:10.5px;font-weight:700;color:var(--text-3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;">بيانات التحويل البنكي</div>
+            <div class="bank-row"><span class="bl">اسم الجهة</span><span class="bv">عمادة الدراسات العليا — جامعة الإمام عبدالرحمن بن فيصل</span></div>
+            <div class="bank-row"><span class="bl">البنك</span><span class="bv">البنك الأهلي السعودي</span></div>
+            <div class="bank-row"><span class="bl">رقم الآيبان</span><span class="bv">SA97 1000 0079 5005 1105 0000</span></div>
+          </div>
+        </li>
+      </ol>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:var(--text-3);letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:12px;"><div style="flex:1;height:1px;background:var(--border)"></div>نص التعهد والإقرار<div style="flex:1;height:1px;background:var(--border)"></div></div>
+    <div class="pledge-box">
+      أتعهد أنا الموقع أدناه بصحة جميع البيانات والمرفقات المقدمة في هذا الطلب، وأتحمل كامل المسؤولية النظامية في حال ثبوت خلاف ذلك. كما أُقرّ بأن العنوان البريدي المدوّن صحيح، وأتحمل مسؤولية أي خطأ أو نقص فيه بما في ذلك تكاليف إعادة الإرسال.<br><br>
+      وأوافق على أن عمادة الدراسات العليا <strong>غير مسؤولة</strong> عن أي تأخير أو فقد ناتج عن بيانات غير صحيحة، وأُقرّ بأن <strong>الرسوم المدفوعة لا تُسترد بعد تنفيذ الخدمة</strong>.
+    </div>
+    <div class="check-row" id="agreeRow"><input type="checkbox" id="agreeChk"><div class="custom-check"></div><span class="check-label">أقرّ بأنني قرأت وفهمت جميع الشروط والأحكام المذكورة أعلاه وأوافق عليها</span></div>
+    <span class="errmsg" id="e-agree" style="margin-bottom:14px">يجب الموافقة على الشروط للمتابعة</span>
+    <div class="grid-2">
+      <div class="fgroup"><label class="flabel">الاسم الكامل <span class="req">*</span></label><input class="finput" id="f-pname" type="text" placeholder="اسمك الكامل"><span class="errmsg" id="e-pname">هذا الحقل مطلوب</span></div>
+      <div class="fgroup"><label class="flabel">تاريخ التقديم <span class="req">*</span></label><input class="finput" id="f-pdate" type="date"><span class="errmsg" id="e-pdate">يُرجى إدخال التاريخ</span></div>
+    </div>
+    <div class="sep"><div class="sep-line"></div><span class="sep-lbl">التوقيع الإلكتروني</span><div class="sep-line"></div></div>
+    <div class="fgroup">
+      <label class="flabel">التوقيع <span class="req">*</span></label>
+      <canvas id="sigCanvas" width="800" height="130"></canvas>
+      <div class="sig-actions"><span class="sig-hint">وقّع بالإصبع أو الماوس</span><button class="btn-clr" onclick="clearSig()">مسح</button></div>
+      <span class="errmsg" id="e-sig">يُرجى التوقيع في الحقل أعلاه</span>
+    </div>
+  </div>
+</div>
+
+<!-- ⑦ الدفع -->
+<div class="section-card">
+  <div class="section-head"><div class="section-num">٧</div><div class="section-info"><h2>الدفع الإلكتروني</h2><p>أدخل بيانات البطاقة البنكية لإتمام الطلب</p></div></div>
+  <div class="section-body">
+    <div class="pay-banner">
+      <div><div class="lbl">المبلغ المستحق للدفع</div><div class="amt"><span style="font-size:13px;color:var(--text-2);margin-left:4px">ر.س</span><span id="pay-amt">0.00</span></div></div>
+      <div style="font-size:30px">💳</div>
+    </div>
+    <div class="card-vis">
+      <div class="card-chip"></div>
+      <div class="card-num" id="cv-num">•••• &nbsp;•••• &nbsp;•••• &nbsp;••••</div>
+      <div class="card-btm">
+        <div><div class="card-lbl">CARD HOLDER</div><div class="card-val" id="cv-name">الاسم الكامل</div></div>
+        <div><div class="card-lbl">EXPIRES</div><div class="card-val" id="cv-exp">MM / YY</div></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="fgroup col-full"><label class="flabel">اسم حامل البطاقة <span class="req">*</span></label><input class="finput" id="f-cname" type="text" placeholder="الاسم كما يظهر على البطاقة" oninput="document.getElementById('cv-name').textContent=this.value||'الاسم الكامل'"><span class="errmsg" id="e-cname">هذا الحقل مطلوب</span></div>
+      <div class="fgroup col-full"><label class="flabel">رقم البطاقة <span class="req">*</span></label><input class="finput" id="f-cnum" type="text" placeholder="•••• •••• •••• ••••" maxlength="19" dir="ltr" inputmode="numeric" oninput="fmtCard(this)"><span class="errmsg" id="e-cnum">أدخل رقم بطاقة مكوّن من 16 رقماً</span></div>
+      <div class="fgroup"><label class="flabel">تاريخ الانتهاء <span class="req">*</span></label><input class="finput" id="f-cexp" type="text" placeholder="MM/YY" maxlength="5" dir="ltr" inputmode="numeric" oninput="fmtExp(this)"><span class="errmsg" id="e-cexp">تاريخ انتهاء غير صحيح</span></div>
+      <div class="fgroup"><label class="flabel">رمز الأمان CVV <span class="req">*</span></label><input class="finput" id="f-cvv" type="password" placeholder="•••" maxlength="4" dir="ltr" inputmode="numeric"><span class="errmsg" id="e-cvv">أدخل رمز الأمان</span></div>
+    </div>
+    <div class="check-row" id="saveRow" style="margin-top:12px"><input type="checkbox" id="saveCard"><div class="custom-check"></div><span class="check-label">حفظ بيانات البطاقة للدفعات القادمة (مشفّرة وآمنة)</span></div>
+    <div class="bank-info">
+      <div class="bank-t">التحويل البنكي — بديل للدفع الإلكتروني</div>
+      <div class="bank-row"><span class="bl">اسم الجهة</span><span class="bv">عمادة الدراسات العليا — جامعة الإمام عبدالرحمن بن فيصل</span></div>
+      <div class="bank-row"><span class="bl">البنك</span><span class="bv">البنك الأهلي السعودي</span></div>
+      <div class="bank-row"><span class="bl">رقم الآيبان</span><span class="bv">SA97 1000 0079 5005 1105 0000</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Submit -->
+<div class="submit-wrap">
+  <p class="submit-note">بالنقر على "إرسال الطلب" تؤكد صحة جميع البيانات وموافقتك على الشروط.</p>
+  <button class="btn-submit" onclick="submitForm()">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    إرسال الطلب وإتمام الدفع
+  </button>
+</div>
+
+</div><!-- /page -->
+
+<!-- Sticky bar -->
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-inner">
+    <div><div class="sb-label">الإجمالي المستحق</div><div class="sb-amt" id="sb-amt">0.00 ر.س</div></div>
+    <button class="btn-scroll-pay" onclick="document.querySelector('.submit-wrap').scrollIntoView({behavior:'smooth'})">الانتقال للدفع ↓</button>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-modal">
+    <div class="success-check"><svg viewBox="0 0 36 36" fill="none"><polyline points="7,19 15,27 29,11" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2>تم إرسال طلبك بنجاح!</h2>
+    <p>شكراً لك. سيتم مراجعة طلبك خلال <strong>3 أيام عمل</strong>. سيصلك بريد تأكيدي على العنوان المسجّل.</p>
+    <div class="ref-box"><div class="rl">رقم مرجع الطلب</div><div class="rv" id="refNum">DGS-2024-00000</div></div>
+    <div style="text-align:right;background:var(--surface);border-radius:10px;padding:14px 16px;margin-bottom:18px;font-size:12.5px;color:var(--navy);font-weight:600;line-height:2">
+      📧 <strong>DGS.Graduate@iau.edu.sa</strong><br>
+      ⏱ وقت المعالجة: 3 أيام عمل
+    </div>
+    <button class="btn-close" onclick="closeSuccess()">إغلاق وتقديم طلب جديد</button>
+  </div>
+</div>
+
+<script>
+var svcs={};
+var sigDrawing=false,sigHasData=false;
+var prices={ship:115,c1:460,c2:1725,copy:11.5,trans:23,grad:23,eng:23,wes:23,ver:23,cust:115};
+var svcIds=Object.keys(prices);
+
+// ── Org Toggle — MOBILE SAFE ──
+// Single source of truth: only the sw div controls the toggle
+document.addEventListener('DOMContentLoaded',function(){
+  var swOrg=document.getElementById('swOrg');
+  var tcCard=document.getElementById('tcCard');
+  var cb=document.getElementById('isOrg');
+
+  function setOrg(val){
+    cb.checked=val;
+    tcCard.classList.toggle('on',val);
+    document.getElementById('orgSec').classList.toggle('open',val);
+    var qr=document.getElementById('qr-card');
+    if(qr) qr.style.display=val?'block':'none';
+  }
+
+  // SW click toggles
+  swOrg.addEventListener('click',function(e){
+    e.stopPropagation();
+    setOrg(!cb.checked);
+  });
+  // Card click (not on sw) also toggles
+  tcCard.addEventListener('click',function(e){
+    if(e.target===swOrg||swOrg.contains(e.target)) return;
+    setOrg(!cb.checked);
+  });
+
+  // ── Check rows — MOBILE SAFE ──
+  function setupCheckRow(rowId,cbId){
+    var row=document.getElementById(rowId);
+    var checkbox=document.getElementById(cbId);
+    if(!row||!checkbox) return;
+    row.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      var val=!checkbox.checked;
+      checkbox.checked=val;
+      row.classList.toggle('checked',val);
+    });
+  }
+  setupCheckRow('agreeRow','agreeChk');
+  setupCheckRow('saveRow','saveCard');
+
+  // ── Service rows — MOBILE SAFE ──
+  svcIds.forEach(function(id){
+    var row=document.getElementById('r-'+id);
+    if(!row) return;
+    row.addEventListener('click',function(e){
+      // Allow qty input to work
+      if(e.target.classList.contains('svc-qty')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var cb2=document.getElementById('c-'+id);
+      var val=!cb2.checked;
+      cb2.checked=val;
+      svcs[id]=val;
+      row.classList.toggle('picked',val);
+      var qty=document.getElementById('q-'+id);
+      if(qty) qty.disabled=!val;
+      calcTot();
+      // Address fields
+      if(id==='ship'){
+        document.getElementById('addr-fields').style.display=val?'block':'none';
+        document.getElementById('addr-info').style.display=val?'none':'flex';
+      }
+    });
+  });
+
+  // Init date
+  document.getElementById('f-pdate').value=new Date().toISOString().split('T')[0];
+  initSig();
+});
+
+function calcTot(){
+  var sub=0;
+  svcIds.forEach(function(id){
+    if(svcs[id]){
+      var q=parseFloat((document.getElementById('q-'+id)||{}).value)||1;
+      sub+=prices[id]*q;
+    }
+  });
+  var vat=sub*0.15,tot=sub+vat;
+  document.getElementById('t-sub').textContent=sub.toFixed(2)+' ر.س';
+  document.getElementById('t-vat').textContent=vat.toFixed(2)+' ر.س';
+  document.getElementById('t-tot').textContent=tot.toFixed(2)+' ر.س';
+  document.getElementById('pay-amt').textContent=tot.toFixed(2);
+  document.getElementById('sb-amt').textContent=tot.toFixed(2)+' ر.س';
+  document.getElementById('stickyBar').classList.toggle('visible',tot>0);
+}
+
+function pickFile(input,zoneId,fnId){
+  var zone=document.getElementById(zoneId);
+  var fname=document.getElementById(fnId);
+  if(input.files&&input.files.length){
+    fname.textContent='✓ '+Array.from(input.files).map(function(f){return f.name}).join(', ');
+    zone.classList.add('filled');
+    if(zoneId==='uz-id') document.getElementById('e-idfile').classList.remove('show');
+  }
+}
+
+function fmtCard(inp){
+  var v=inp.value.replace(/\D/g,'').substring(0,16);
+  inp.value=v.match(/.{1,4}/g)?.join(' ')||v;
+  document.getElementById('cv-num').textContent=inp.value||'•••• •••• •••• ••••';
+}
+function fmtExp(inp){
+  var v=inp.value.replace(/\D/g,'').substring(0,4);
+  if(v.length>=2) v=v.substring(0,2)+'/'+v.substring(2);
+  inp.value=v;
+  document.getElementById('cv-exp').textContent=v||'MM / YY';
+}
+
+// ── Signature ──
+function initSig(){
+  var c=document.getElementById('sigCanvas');
+  if(!c) return;
+  var ctx=c.getContext('2d');
+  ctx.strokeStyle='#0b1f3a';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';
+  function pos(e){
+    var r=c.getBoundingClientRect(),sx=c.width/r.width,sy=c.height/r.height;
+    if(e.touches) return{x:(e.touches[0].clientX-r.left)*sx,y:(e.touches[0].clientY-r.top)*sy};
+    return{x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};
+  }
+  c.addEventListener('mousedown',function(e){sigDrawing=true;ctx.beginPath();var p=pos(e);ctx.moveTo(p.x,p.y)});
+  c.addEventListener('mousemove',function(e){if(!sigDrawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();sigHasData=true});
+  c.addEventListener('mouseup',function(){sigDrawing=false});
+  c.addEventListener('mouseleave',function(){sigDrawing=false});
+  c.addEventListener('touchstart',function(e){e.preventDefault();sigDrawing=true;ctx.beginPath();var p=pos(e);ctx.moveTo(p.x,p.y)},{passive:false});
+  c.addEventListener('touchmove',function(e){e.preventDefault();if(!sigDrawing)return;var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();sigHasData=true},{passive:false});
+  c.addEventListener('touchend',function(){sigDrawing=false});
+  function resize(){c.style.width=c.parentElement.offsetWidth+'px';c.style.height='130px';}
+  resize(); window.addEventListener('resize',resize);
+}
+function clearSig(){
+  var c=document.getElementById('sigCanvas');
+  c.getContext('2d').clearRect(0,0,c.width,c.height);
+  sigHasData=false;
+}
+
+// ── Validation ──
+function errSet(id,show){
+  var e=document.getElementById('e-'+id);
+  var i=document.getElementById('f-'+id);
+  if(e) e.classList.toggle('show',show);
+  if(i) i.classList.toggle('err',show);
+}
+function validateAll(){
+  var ok=true;
+  ['name','sid','id','col','prog','yr','email','phone'].forEach(function(f){
+    var v=(document.getElementById('f-'+f)||{}).value||'';
+    if(!v.trim()){errSet(f,true);ok=false;}else errSet(f,false);
+  });
+  var em=document.getElementById('f-email').value;
+  if(em&&!/\S+@\S+\.\S+/.test(em)){errSet('email',true);ok=false;}
+  var ph=document.getElementById('f-phone').value;
+  if(ph&&!/^05\d{8}$/.test(ph)){errSet('phone',true);ok=false;}
+  if(!Object.values(svcs).some(Boolean)){alert('يُرجى اختيار خدمة واحدة على الأقل');ok=false;}
+  if(!document.getElementById('uz-id').classList.contains('filled')){
+    document.getElementById('e-idfile').classList.add('show');ok=false;
+  }
+  if(svcs['ship']){
+    ['aname','acity','adist','aphone'].forEach(function(f){
+      var v=(document.getElementById('f-'+f)||{}).value||'';
+      if(!v.trim()){errSet(f,true);ok=false;}else errSet(f,false);
+    });
+  }
+  if(!document.getElementById('agreeChk').checked){
+    document.getElementById('e-agree').classList.add('show');ok=false;
+  }
+  ['pname','pdate'].forEach(function(f){
+    var v=(document.getElementById('f-'+f)||{}).value||'';
+    errSet(f,!v.trim());if(!v.trim())ok=false;
+  });
+  if(!sigHasData){document.getElementById('e-sig').classList.add('show');ok=false;}
+  else document.getElementById('e-sig').classList.remove('show');
+  ['cname','cnum','cexp','cvv'].forEach(function(f){
+    var v=(document.getElementById('f-'+f)||{}).value||'';
+    errSet(f,!v.trim());if(!v.trim())ok=false;
+  });
+  var cn=document.getElementById('f-cnum').value.replace(/\s/g,'');
+  if(cn&&cn.length!==16){errSet('cnum',true);ok=false;}
+  return ok;
+}
+
+function submitForm(){
+  if(!validateAll()){
+    var first=document.querySelector('.errmsg.show');
+    if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  document.getElementById('refNum').textContent='DGS-'+new Date().getFullYear()+'-'+Math.floor(10000+Math.random()*90000);
+  document.getElementById('successOverlay').classList.add('show');
+}
+
+function closeSuccess(){
+  document.getElementById('successOverlay').classList.remove('show');
+  document.querySelectorAll('.finput').forEach(function(el){el.value='';el.classList.remove('err')});
+  document.querySelectorAll('.errmsg').forEach(function(el){el.classList.remove('show')});
+  document.querySelectorAll('.svc-row').forEach(function(r){r.classList.remove('picked')});
+  svcIds.forEach(function(id){
+    var cb2=document.getElementById('c-'+id),q=document.getElementById('q-'+id);
+    if(cb2)cb2.checked=false;if(q)q.disabled=true;
+  });
+  svcs={};calcTot();clearSig();
+  document.getElementById('agreeChk').checked=false;
+  document.getElementById('agreeRow').classList.remove('checked');
+  document.getElementById('saveCard').checked=false;
+  document.getElementById('saveRow').classList.remove('checked');
+  document.getElementById('isOrg').checked=false;
+  document.getElementById('tcCard').classList.remove('on');
+  document.getElementById('orgSec').classList.remove('open');
+  document.getElementById('addr-fields').style.display='none';
+  document.getElementById('addr-info').style.display='flex';
+  document.getElementById('stickyBar').classList.remove('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
